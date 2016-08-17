@@ -23,6 +23,12 @@ namespace CoreDataModels
             Region = region;
             Captain = captain;
             Players = players;
+            Substitutes = substitutes;
+
+            if (Substitutes == null)
+            {
+                Substitutes = new List<Player>();
+            }
         }
     }
 }

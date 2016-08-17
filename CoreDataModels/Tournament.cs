@@ -9,14 +9,20 @@ namespace CoreDataModels
     public class Tournament
     {
         public string Name { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
 
-        public Tournament(string name, DateTime startTime, DateTime endTime)
+        public List<Series> GroupStage { get; set; }
+        public List<Series> MainEvent { get; set; }
+
+        public Tournament(string name, DateTime start, DateTime end, List<Series> groupStage = null, List<Series> mainEvent = null)
         {
             Name = name;
-            StartTime = startTime;
-            EndTime = endTime;
+            Start = start;
+            End = end;
+
+            GroupStage = groupStage;
+            MainEvent = mainEvent;
         }
     }
 }
