@@ -42,10 +42,10 @@ namespace CoreDataModels
             }
         }
 
-        public Series(List<Match> matches, DateTime startTime)
+        public Series(List<Match> matches, DateTime start)
         {
             Matches = matches;
-            StartTime = startTime;
+            Start = start;
         }
     }
 }

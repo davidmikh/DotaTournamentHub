@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="Match.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="Series.cs" />
     <Compile Include="Team.cs" />
     <Compile Include="Tournament.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
