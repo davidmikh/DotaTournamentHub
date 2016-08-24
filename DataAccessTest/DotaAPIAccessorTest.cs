@@ -21,7 +21,15 @@ namespace DataAccessTest
         public void GetAllLiveTournamentGames()
         {
             var liveGames = accessor.GetAllLiveTournamentGames();
-            CollectionAssert.AllItemsAreInstancesOfType(liveGames, typeof(JsonMatch));
+            CollectionAssert.AllItemsAreInstancesOfType(liveGames, typeof(JsonLiveMatch));
+        }
+
+        [DataTestMethod]
+        [DataRow(2558534849, 4664)]
+        public void GetMatch(long matchID, long leagueID)
+        {
+            var match = accessor.GetMatch(matchID);
+            Assert.AreEqual(match.LeagueID, leagueID);
         }
     }
 }

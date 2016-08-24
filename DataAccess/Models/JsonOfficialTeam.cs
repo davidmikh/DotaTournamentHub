@@ -12,7 +12,7 @@ namespace DataAccess.Models
         public string Name { get; set; }
         public long ID { get; set; }
         public long Logo { get; set; }
-        //TODO: Not sure what this means
+        //Indicates whether the players for this team are all team members
         public bool Complete { get; set; }
 
         public JsonOfficialTeam(JToken json)

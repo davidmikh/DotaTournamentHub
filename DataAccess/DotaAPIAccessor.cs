@@ -37,19 +37,30 @@ namespace DataAccess
         }
 
 
-        public List<JsonMatch> GetAllLiveTournamentGames()
+        public List<JsonLiveMatch> GetAllLiveTournamentGames()
         {
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri(baseAddress);
                 var response = client.GetAsync(string.Format("IDOTA2Match_{0}/GetLiveLeagueGames/v1?key={1}", id, devKey)).Result;
                 JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["result"].First().First();
-                List<JsonMatch> matches = new List<JsonMatch>();
+                List<JsonLiveMatch> matches = new List<JsonLiveMatch>();
                 foreach (var match in json)
                 {
-                    matches.Add(new JsonMatch(match));
+                    matches.Add(new JsonLiveMatch(match));
                 }
                 return matches;
+            }
+        }
+
+        public JsonMatch GetMatch(long matchID)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseAddress);
+                var response = client.GetAsync(string.Format("IDOTA2Match_{0}/GetMatchDetails/v1?key={1}&match_id={2}", id, devKey, matchID)).Result;
+                JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["result"];
+                return new JsonMatch(json);
             }
         }
     }

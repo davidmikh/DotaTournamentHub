@@ -35,7 +35,15 @@ namespace DataAccess.Models
             AccountID = (int)json["account_id"];
             HeroID = (int)json["hero_id"];
             Kills = (int)json["kills"];
-            Deaths = (int)json["death"];
+            //In some parts of the API "death" is used. Other times its "deaths"
+            if (json["death"] == null)
+            {
+                Deaths = (int)json["deaths"];
+            }
+            else
+            {
+                Deaths = (int)json["death"];
+            }
             Assists = (int)json["assists"];
             LastHits = (int)json["last_hits"];
             Denies = (int)json["denies"];
@@ -43,17 +51,39 @@ namespace DataAccess.Models
             Level = (int)json["level"];
             GPM = (int)json["gold_per_min"];
             XPM = (int)json["xp_per_min"];
-            UltimateState = (int)json["ultimate_state"];
-            UltimateCD = (int)json["ultimate_cooldown"];
+            if (json["ultimate_state"] != null)
+            {
+                UltimateState = (int)json["ultimate_state"];
+                UltimateCD = (int)json["ultimate_cooldown"];
+            }
             Items = new int[6];
+            string itemStr = "item";
+            if (json["item1"] == null)
+            {
+                itemStr = "item_";
+            }
             for (int i = 0; i < 6; i++)
             {
-                Items[i] = (int)json["item" + i];
+                Items[i] = (int)json[itemStr + i];
             }
-            RespawnTimer = (int)json["respawn_timer"];
-            PositionX = (double)json["position_x"];
-            PositionY = (double)json["position_y"];
-            NetWorth = (int)json["net_worth"];
+            if (json["respawn_timer"] != null)
+            {
+                RespawnTimer = (int)json["respawn_timer"];
+            }
+            if (json["position_x"] != null)
+            {
+                PositionX = (double)json["position_x"];
+                PositionY = (double)json["position_y"];
+            }
+            if (json["net_worth"] != null)
+            {
+                NetWorth = (int)json["net_worth"];
+            }
+            else
+            {
+                //If a match is completed net worth is no longer displayed. Can still obtain it via total gold spent + gold at the end
+                NetWorth = (int)json["gold_spent"] + (int)json["gold"];
+            }
         }
     }
 }

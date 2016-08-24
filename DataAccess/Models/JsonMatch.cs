@@ -9,47 +9,77 @@ namespace DataAccess.Models
 {
     public class JsonMatch
     {
-        public List<JsonUser> Users { get; set; }
-        public JsonOfficialTeam Radiant { get; set; }
-        public JsonOfficialTeam Dire { get; set; }
-        public long LobbyID { get; set; }
-        public long MatchID { get; set; }
-        public int NumSpectators { get; set; }
-        public long SeriesID { get; set; }
-        public int GameNumber { get; set; }
+        public List<JsonPlayer> Players { get; set; }
+        public bool RadiantWin { get; set; }
+        public TimeSpan Duration { get; set; }
+        public DateTime StartTime { get; set; }
+        public long ID { get; set; }
+        public long SequenceNum { get; set; }
+        public int RadiantTowerState { get; set; }
+        public int DireTowerState { get; set; }
+        public int RadiantBarracksState { get; set; }
+        public int DireBarracksState { get; set; }
+        public int ServerClusterNum { get; set; }
+        public int LobbyType { get; set; }
         public long LeagueID { get; set; }
-        public int RadiantSeriesWins { get; set; }
-        public int DireSeriesWins { get; set; }
-        public int SeriesType { get; set; }
-        public long LeagueSeriesID { get; set; }
-        public long LeagueGameID { get; set; }
-        public string StageName { get; set; }
-        public int LeagueTier { get; set; }
-        public JsonScoreboard ScoreBoard { get; set; }
+        public int GameMode { get; set; }
+        public int Engine { get; set; }
+        public int RadiantKills { get; set; }
+        public int DireKills { get; set; }
+        public long RadiantTeamID { get; set; }
+        public string RadiantName { get; set; }
+        public long RadiantLogoID { get; set; }
+        public long RadiantCaptainID { get; set; }
+        public long DireTeamID { get; set; }
+        public string DireName { get; set; }
+        public long DireLogoID { get; set; }
+        public long DireCaptainID { get; set; }
+        public int[] RadiantPicks { get; set; }
+        public int[] RadiantBans { get; set; }
+        public int[] DirePicks { get; set; }
+        public int[] DireBans { get; set; }
 
         public JsonMatch(JToken json)
         {
-            Users = new List<JsonUser>();
-            foreach (var user in json["players"])
+            Players = new List<JsonPlayer>();
+            foreach (var player in json["players"])
             {
-                Users.Add(new JsonUser(user));
+                Players.Add(new JsonPlayer(player));
             }
-            Radiant = new JsonOfficialTeam(json["radiant_team"]);
-            Dire = new JsonOfficialTeam(json["dire_team"]);
-            LobbyID = (long)json["lobby_id"];
-            MatchID = (long)json["match_id"];
-            NumSpectators = (int)json["spectators"];
-            SeriesID = (long)json["series_id"];
-            GameNumber = (int)json["game_number"];
-            LeagueID = (long)json["league_id"];
-            RadiantSeriesWins = (int)json["radiant_series_wins"];
-            DireSeriesWins = (int)json["dire_series_wins"];
-            SeriesType = (int)json["series_type"];
-            LeagueSeriesID = (long)json["league_series_id"];
-            LeagueGameID = (long)json["league_game_id"];
-            StageName = (string)json["stage_name"];
-            LeagueTier = (int)json["league_tier"];
-            ScoreBoard = new JsonScoreboard(json["scoreboard"]);
+            RadiantWin = (bool)json["radiant_win"];
+            Duration = new TimeSpan(0, 0, (int)json["duration"]);
+            StartTime = DateTimeOffset.FromUnixTimeSeconds((long)json["start_time"]).UtcDateTime;
+            ID = (long)json["match_id"];
+            SequenceNum = (long)json["match_seq_num"];
+            RadiantTowerState = (int)json["tower_status_radiant"];
+            DireTowerState = (int)json["tower_status_dire"];
+            RadiantBarracksState = (int)json["barracks_status_radiant"];
+            DireBarracksState = (int)json["barracks_status_dire"];
+            ServerClusterNum = (int)json["cluster"];
+            LobbyType = (int)json["lobby_type"];
+            LeagueID = (long)json["leagueid"];
+            GameMode = (int)json["game_mode"];
+            Engine = (int)json["engine"];
+            RadiantKills = (int)json["radiant_score"];
+            DireKills = (int)json["dire_score"];
+            if (json["radiant_team_id"] != null)
+            {
+                RadiantTeamID = (long)json["radiant_team_id"];
+                RadiantName = (string)json["radiant_name"];
+                RadiantLogoID = (long)json["radiant_logo"];
+                RadiantCaptainID = (long)json["radiant_captain"];
+            }
+            if (json["dire_team_id"] != null)
+            {
+                DireTeamID = (long)json["dire_team_id"];
+                DireName = (string)json["dire_name"];
+                DireLogoID = (long)json["dire_logo"];
+                DireCaptainID = (long)json["dire_captain"];
+            }
+            RadiantPicks = json["picks_bans"].Where(t => (bool)t["is_pick"] == true && (int)t["team"] == 0).Select(t => (int)t["hero_id"]).ToArray();
+            RadiantBans = json["picks_bans"].Where(t => (bool)t["is_pick"] == false && (int)t["team"] == 0).Select(t => (int)t["hero_id"]).ToArray();
+            DirePicks = json["picks_bans"].Where(t => (bool)t["is_pick"] == true && (int)t["team"] == 1).Select(t => (int)t["hero_id"]).ToArray();
+            DireBans = json["picks_bans"].Where(t => (bool)t["is_pick"] == false && (int)t["team"] == 1).Select(t => (int)t["hero_id"]).ToArray();
         }
     }
 }

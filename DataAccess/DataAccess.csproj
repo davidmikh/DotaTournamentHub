@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DotaAPIAccessor.cs" />
+    <Compile Include="Models\JsonLiveMatch.cs" />
     <Compile Include="Models\JsonMatch.cs" />
     <Compile Include="Models\JsonOfficialTeam.cs" />
     <Compile Include="Models\JsonPlayer.cs" />
