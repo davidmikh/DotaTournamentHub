@@ -81,3 +81,7 @@ artifacts/
 *.pidb
 *.svclog
 *.scc
+
+# Sensitive data files #
+########################
+APIKeys.resw
