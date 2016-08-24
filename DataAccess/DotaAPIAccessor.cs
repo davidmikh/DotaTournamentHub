@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
 using Windows.Data.Json;
 
 namespace DataAccess
@@ -13,12 +14,21 @@ namespace DataAccess
     public class DotaAPIAccessor
     {
         //For information on how the Dota 2 API works visit https://wiki.teamfortress.com/wiki/WebAPI
-
-        //TODO: LOAD THIS FROM SOMEWHERE. DON'T COMMIT TO GIT
-        private string devKey = "";
+        private string devKey;
         //This is the ID for Dota 2 in the Valve API
-        private string id = "570";
-        private string baseAddress = "http://api.steampowered.com/";
+        private string id;
+        private string baseAddress;
+
+        public DotaAPIAccessor()
+        {
+            devKey = ResourceLoader.GetForViewIndependentUse("DataAccess/APIKeys").GetString("Dota2APIKey");
+            if (devKey == "")
+            {
+                throw new Exception("Add an API key to APIKeys.resw for the Dota 2 API. A key can be generated at: http://steamcommunity.com/dev/apikey");
+            }
+            id = "570";
+            baseAddress = "http://api.steampowered.com/";
+        }
 
         public List<JsonTournament> GetAllTournaments()
         {

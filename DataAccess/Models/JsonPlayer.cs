@@ -81,8 +81,8 @@ namespace DataAccess.Models
             }
             else
             {
-                //If a match is completed net worth is no longer displayed. Can still obtain it via total gold spent + gold at the end
-                NetWorth = (int)json["gold_spent"] + (int)json["gold"];
+                //If a match is completed net worth is no longer displayed. Current gold + spent gold however still shows net worth
+                Gold += (int)json["gold_spent"];
             }
         }
     }
