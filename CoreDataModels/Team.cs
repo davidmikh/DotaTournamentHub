@@ -9,17 +9,16 @@ namespace CoreDataModels
     public class Team
     {
         public string Name { get; set; }
-        public string Location { get; set; }
+        public long ID { get; set; }
         public string Region { get; set; }
 
         public Player Captain { get; set; }
         public List<Player> Players { get; set; }
         public List<Player> Substitutes { get; set; }
 
-        public Team(string name, string location, string region, Player captain, List<Player> players, List<Player> substitutes = null)
+        public Team(string name, string region, Player captain, List<Player> players, List<Player> substitutes = null)
         {
             Name = name;
-            Location = location;
             Region = region;
             Captain = captain;
             Players = players;

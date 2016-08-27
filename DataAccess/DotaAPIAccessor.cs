@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using Windows.UI.Xaml.Media.Imaging;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
@@ -15,8 +16,7 @@ namespace DataAccess
     {
         //For information on how the Dota 2 API works visit https://wiki.teamfortress.com/wiki/WebAPI
         private string devKey;
-        //This is the ID for Dota 2 in the Valve API
-        private string id;
+        private string gameID;
         private string baseAddress;
 
         public DotaAPIAccessor()
@@ -26,16 +26,16 @@ namespace DataAccess
             {
                 throw new Exception("Add an API key to APIKeys.resw for the Dota 2 API. A key can be generated at: http://steamcommunity.com/dev/apikey");
             }
-            id = "570";
+            gameID = "570";
             baseAddress = "http://api.steampowered.com/";
         }
 
-        public List<JsonTournament> GetAllTournaments()
+        public IEnumerable<JsonTournament> GetAllTournaments()
         {
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri(baseAddress);
-                var response = client.GetAsync(string.Format("IDOTA2Match_{0}/GetLeagueListing/v1?key={1}", id, devKey)).Result;
+                var response = client.GetAsync(string.Format("IDOTA2Match_{0}/GetLeagueListing/v1?key={1}", gameID, devKey)).Result;
                 JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["result"].First().First();
                 List<JsonTournament> tournamnets = new List<JsonTournament>();
                 foreach (var tournament in json)
@@ -47,12 +47,12 @@ namespace DataAccess
         }
 
 
-        public List<JsonLiveMatch> GetAllLiveTournamentGames()
+        public IEnumerable<JsonLiveMatch> GetAllLiveTournamentGames()
         {
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri(baseAddress);
-                var response = client.GetAsync(string.Format("IDOTA2Match_{0}/GetLiveLeagueGames/v1?key={1}", id, devKey)).Result;
+                var response = client.GetAsync(string.Format("IDOTA2Match_{0}/GetLiveLeagueGames/v1?key={1}", gameID, devKey)).Result;
                 JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["result"].First().First();
                 List<JsonLiveMatch> matches = new List<JsonLiveMatch>();
                 foreach (var match in json)
@@ -68,10 +68,23 @@ namespace DataAccess
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri(baseAddress);
-                var response = client.GetAsync(string.Format("IDOTA2Match_{0}/GetMatchDetails/v1?key={1}&match_id={2}", id, devKey, matchID)).Result;
+                var response = client.GetAsync(string.Format("IDOTA2Match_{0}/GetMatchDetails/v1?key={1}&match_id={2}", gameID, devKey, matchID)).Result;
                 JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["result"];
                 return new JsonMatch(json);
             }
         }
+
+        public Uri GetImageURL(long imageID)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseAddress);
+                var response = client.GetAsync(string.Format("ISteamRemoteStorage/GetUGCFileDetails/v1?key={0}&appid={1}&ugcid={2}", devKey, gameID, imageID)).Result;
+                JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["data"];
+                return new Uri((string)json["url"]);
+            }
+        }
+
+        //Liquid logo id: 451783905032671206
     }
 }

@@ -190,6 +190,10 @@
       <Project>{F70E8132-51E7-4984-9314-AC51D5934224}</Project>
       <Name>CoreDataModels</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DataManager\DataManager.csproj">
+      <Project>{292f1be7-4b29-450e-a0a1-7782939d19a9}</Project>
+      <Name>DataManager</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
