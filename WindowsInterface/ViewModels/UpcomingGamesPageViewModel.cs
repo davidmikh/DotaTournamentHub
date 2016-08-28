@@ -17,17 +17,17 @@ namespace WindowsInterface.ViewModels
             //Used to easily display information in the xaml editor without launching the program
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
-                Tournaments = new List<TournamentModel>
-                    {
-                    new TournamentModel("The International 6",
-                        new List<SeriesModel>
-                        {
-                            new SeriesModel(new Team("EG", null, null, null, null),
-                            new Team("Na'Vi", null, null, null, null),
-                            new DateTime(2016, 9, 10))
-                        },
-                        new DateTime(2016, 8, 18))
-                    };
+                //Tournaments = new List<TournamentModel>
+                //    {
+                //    new TournamentModel("The International 6",
+                //        new List<SeriesModel>
+                //        {
+                //            new SeriesModel(new OfficialTeam("EG", null, null, null, null),
+                //            new OfficialTeam("Na'Vi", null, null, null, null),
+                //            new DateTime(2016, 9, 10))
+                //        },
+                //        new DateTime(2016, 8, 18))
+                //    };
                 //Value = "Designtime value";
             }
         }
@@ -35,14 +35,14 @@ namespace WindowsInterface.ViewModels
         //List<TournamentModel> _Tournaments = new List<TournamentModel>();
         List<TournamentModel> _Tournaments = new List<TournamentModel>
                     {
-                    new TournamentModel("The International 6",
-                        new List<SeriesModel>
-                        {
-                            new SeriesModel(new Team("EG", null, null, null, null),
-                            new Team("Na'Vi", null, null, null, null),
-                            new DateTime(2016, 9, 10))
-                        },
-                        new DateTime(2016, 8, 18))
+                    //new TournamentModel("The International 6",
+                    //    new List<SeriesModel>
+                    //    {
+                    //        new SeriesModel(new OfficialTeam("EG", null, null, null, null),
+                    //        new OfficialTeam("Na'Vi", null, null, null, null),
+                    //        new DateTime(2016, 9, 10))
+                    //    },
+                    //    new DateTime(2016, 8, 18))
                     };
         public List<TournamentModel> Tournaments { get { return _Tournaments; } set { Set(ref _Tournaments, value); } }
 

@@ -8,26 +8,12 @@ namespace CoreDataModels
 {
     public class Team
     {
-        public string Name { get; set; }
-        public long ID { get; set; }
-        public string Region { get; set; }
-
-        public Player Captain { get; set; }
-        public List<Player> Players { get; set; }
-        public List<Player> Substitutes { get; set; }
-
-        public Team(string name, string region, Player captain, List<Player> players, List<Player> substitutes = null)
-        {
-            Name = name;
-            Region = region;
-            Captain = captain;
-            Players = players;
-            Substitutes = substitutes;
-
-            if (Substitutes == null)
-            {
-                Substitutes = new List<Player>();
-            }
-        }
+        public int Kills { get; set; }
+        public string[] Picks { get; set; }
+        public string[] Bans { get; set; }
+        public int TowerState { get; set; }
+        public int BarracksState { get; set; }
+        public OfficialTeam OfficialTeam { get; set; }
+        IEnumerable<Player> Players { get; set; }
     }
 }

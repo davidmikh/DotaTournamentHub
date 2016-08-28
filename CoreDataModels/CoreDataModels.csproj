@@ -107,11 +107,13 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Match.cs" />
+    <Compile Include="PastMatch.cs" />
     <Compile Include="Player.cs" />
-    <Compile Include="Series.cs" />
+    <Compile Include="LiveMatch.cs" />
+    <Compile Include="Match.cs" />
+    <Compile Include="ProPlayer.cs" />
+    <Compile Include="OfficialTeam.cs" />
     <Compile Include="Team.cs" />
-    <Compile Include="Tournament.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\CoreDataModels.rd.xml" />
   </ItemGroup>
