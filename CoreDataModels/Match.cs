@@ -6,27 +6,13 @@ using System.Threading.Tasks;
 
 namespace CoreDataModels
 {
-    public class Match
+    public abstract class Match
     {
-        public int ID { get; set; }
+        public long ID { get; set; }
+        public long LeagueID { get; set; }
         public Team Radiant { get; set; }
         public Team Dire { get; set; }
-        public GameStatus Status { get; set; }
-
-        public Match(int id, Team radiant, Team dire, GameStatus status)
-        {
-            ID = id;
-            Radiant = radiant;
-            Dire = dire;
-            Status = status;
-        }
-    }
-
-    public enum GameStatus
-    {
-        NotStarted,
-        InProgress,
-        RadiantVictory,
-        DireVictory
+        public int GameType { get; set; }
+        public TimeSpan Duration { get; set; }
     }
 }

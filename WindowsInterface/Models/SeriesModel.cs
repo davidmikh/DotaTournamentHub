@@ -10,8 +10,8 @@ namespace WindowsInterface.Models
 {
     public class SeriesModel : EventModelBase
     {
-        public Team TeamA { get; set; }
-        public Team TeamB { get; set; }
+        public OfficialTeam TeamA { get; set; }
+        public OfficialTeam TeamB { get; set; }
         public string Matchup
         {
             get
@@ -20,7 +20,7 @@ namespace WindowsInterface.Models
             }
         }
 
-        public SeriesModel(Team teamA, Team teamB, DateTime start)
+        public SeriesModel(OfficialTeam teamA, OfficialTeam teamB, DateTime start)
         {
             TeamA = teamA;
             TeamB = teamB;
