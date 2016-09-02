@@ -114,6 +114,7 @@
     <Compile Include="Models\JsonOfficialTeam.cs" />
     <Compile Include="Models\JsonPlayer.cs" />
     <Compile Include="Models\JsonTeam.cs" />
+    <Compile Include="Models\JsonTeamProfile.cs" />
     <Compile Include="Models\JsonUser.cs" />
     <Compile Include="Models\JsonScoreboard.cs" />
     <Compile Include="Models\JsonTournament.cs" />

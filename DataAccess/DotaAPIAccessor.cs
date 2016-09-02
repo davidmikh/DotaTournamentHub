@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
 using Windows.Data.Json;
+using System.Net;
 
 namespace DataAccess
 {
@@ -85,6 +86,30 @@ namespace DataAccess
             }
         }
 
-        //Liquid logo id: 451783905032671206
+        public JsonTeamProfile GetTeamInfo(long teamID)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseAddress);
+                bool success = false;
+                HttpResponseMessage response = null;
+                while (!success)
+                {
+                    response = client.GetAsync(string.Format("IDOTA2Match_{0}/GetTeamInfoByTeamID/v1?key={1}&start_at_team_id={2}&teams_requested=1", gameID, devKey, teamID)).Result;
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        success = true;
+                    }
+                    //Keep trying to contact Valve's API in the event of a time out
+                    else if (response.ReasonPhrase == "Gateway Time-out")
+                    {
+                        success = false;
+                    }
+                }
+                
+                JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["result"]["teams"].First();
+                return new JsonTeamProfile(json);
+            }
+        }
     }
 }

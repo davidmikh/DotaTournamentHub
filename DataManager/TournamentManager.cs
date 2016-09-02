@@ -47,7 +47,7 @@ namespace DataManager
                         {
                             ID = jsonMatch.Radiant.ID,
                             Name = jsonMatch.Radiant.Name,
-                            LogoURL = accessor.GetImageURL(jsonMatch.Radiant.Logo),
+                            LogoURL = accessor.GetImageURL(jsonMatch.Radiant.LogoID),
                             //TODO: CaptainID
                             //TODO: Players
                         }
@@ -63,7 +63,7 @@ namespace DataManager
                         {
                             ID = jsonMatch.Dire.ID,
                             Name = jsonMatch.Dire.Name,
-                            LogoURL = accessor.GetImageURL(jsonMatch.Dire.Logo),
+                            LogoURL = accessor.GetImageURL(jsonMatch.Dire.LogoID),
                             //TODO: CaptainID
                             //TODO: Players
                         }
