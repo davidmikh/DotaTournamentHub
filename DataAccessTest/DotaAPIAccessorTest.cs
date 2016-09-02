@@ -40,5 +40,15 @@ namespace DataAccessTest
             var imageURL = accessor.GetImageURL(imageID);
             Assert.AreEqual(uri, imageURL.OriginalString);
         }
+
+        [DataTestMethod]
+        [DataRow(36, "Natus Vincere")]
+        [DataRow(2586976, "OG Dota2")]
+        [DataRow(1838315, "Team Secret")]
+        public void GetTeamInfo(long teamID, string teamName)
+        {
+            var teamInfo = accessor.GetTeamInfo(teamID);
+            Assert.AreEqual(teamInfo.Name, teamName);
+        }
     }
 }

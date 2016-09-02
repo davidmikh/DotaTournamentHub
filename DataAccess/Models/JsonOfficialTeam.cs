@@ -11,7 +11,7 @@ namespace DataAccess.Models
     {
         public string Name { get; set; }
         public long ID { get; set; }
-        public long Logo { get; set; }
+        public long LogoID { get; set; }
         //Indicates whether the players for this team are all team members
         public bool Complete { get; set; }
 
@@ -21,7 +21,7 @@ namespace DataAccess.Models
             {
                 Name = (string)json["team_name"];
                 ID = (long)json["team_id"];
-                Logo = (long)json["team_logo"];
+                LogoID = (long)json["team_logo"];
                 Complete = (bool)json["complete"];
             }
         }
