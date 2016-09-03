@@ -9,6 +9,7 @@ namespace DataAccess.Models
 {
     public class JsonTeamProfile
     {
+        public long ID { get; set; }
         public string Name { get; set; }
         public string Tag { get; set; }
         public long LogoID { get; set; }
@@ -17,8 +18,10 @@ namespace DataAccess.Models
         public long CaptainID { get; set; }
         public IEnumerable<long> PlayedTournamentIDs { get; set; }
 
-        public JsonTeamProfile(JToken json)
+        public JsonTeamProfile(JToken json, long teamID)
         {
+            //The teamID needs to be passed in as a parameter since the Valve API for a team's info doesn't incldue its ID
+            ID = teamID;
             Name = (string)json["name"];
             Tag = (string)json["tag"];
             LogoID = (long)json["logo"];

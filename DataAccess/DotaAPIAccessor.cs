@@ -108,7 +108,7 @@ namespace DataAccess
                 }
                 
                 JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["result"]["teams"].First();
-                return new JsonTeamProfile(json);
+                return new JsonTeamProfile(json, teamID);
             }
         }
     }

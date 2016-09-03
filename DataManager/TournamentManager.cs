@@ -26,6 +26,8 @@ namespace DataManager
             //Convert the mathes from their Json form to a more useful object
             foreach (var jsonMatch in jsonMatches)
             {
+                var radiant = accessor.GetTeamInfo(jsonMatch.Radiant.ID);
+                var dire = accessor.GetTeamInfo(jsonMatch.Dire.ID);
                 matches.Add(new LiveMatch
                 {
                     ID = jsonMatch.ID,
@@ -45,10 +47,10 @@ namespace DataManager
                         //TODO: Bans
                         OfficialTeam = new OfficialTeam
                         {
-                            ID = jsonMatch.Radiant.ID,
-                            Name = jsonMatch.Radiant.Name,
-                            LogoURL = accessor.GetImageURL(jsonMatch.Radiant.LogoID),
-                            //TODO: CaptainID
+                            ID = radiant.ID,
+                            Name = radiant.Name,
+                            LogoURL = accessor.GetImageURL(radiant.LogoID),
+                            CaptainID = radiant.CaptainID,
                             //TODO: Players
                         }
                     },
@@ -61,10 +63,10 @@ namespace DataManager
                         //TODO: Bans
                         OfficialTeam = new OfficialTeam
                         {
-                            ID = jsonMatch.Dire.ID,
-                            Name = jsonMatch.Dire.Name,
-                            LogoURL = accessor.GetImageURL(jsonMatch.Dire.LogoID),
-                            //TODO: CaptainID
+                            ID = dire.ID,
+                            Name = dire.Name,
+                            LogoURL = accessor.GetImageURL(dire.LogoID),
+                            CaptainID = dire.CaptainID,
                             //TODO: Players
                         }
                     },
