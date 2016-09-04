@@ -14,13 +14,15 @@ namespace DataManager
         private DotaAPIAccessor accessor;
         private string[] heroes;
         private string[] items;
+        private IEnumerable<JsonTournament> tournaments;
 
         public TournamentManager()
         {
             accessor = new DotaAPIAccessor();
-            //Try to get this info from cache first, then get it from API and save to cache if that fails
+            //Try to get all this info from cache first, then get it from API and save to cache if that fails
             heroes = accessor.GetHeroes().ToArray();
             items = accessor.GetItems().ToArray();
+            tournaments = accessor.GetAllTournaments();
         }
 
         public IEnumerable<Match> GetLiveTournamentGames()
@@ -51,18 +53,31 @@ namespace DataManager
                 {
                     direAccounts.Add(convertJsonAccountToProPlayer(accessor.GetAccountInfo(id)));
                 }
-                foreach (var player in jsonMatch.ScoreBoard.Radiant.Players)
+                //This can be null when the game is live but still in the drafting stage and no hero has been picked
+                if (jsonMatch.ScoreBoard.Radiant != null)
                 {
-                    radiantPlayers.Add(convertJsonPlayerToPlayer(player));
+                    foreach (var player in jsonMatch.ScoreBoard.Radiant.Players)
+                    {
+                        radiantPlayers.Add(convertJsonPlayerToPlayer(player));
+                    }
                 }
-                foreach (var player in jsonMatch.ScoreBoard.Dire.Players)
+                if (jsonMatch.ScoreBoard.Dire != null)
                 {
-                    direPlayers.Add(convertJsonPlayerToPlayer(player));
+                    foreach (var player in jsonMatch.ScoreBoard.Dire.Players)
+                    {
+                        direPlayers.Add(convertJsonPlayerToPlayer(player));
+                    }
                 }
+                var tournament = tournaments.Where(t => t.ID == jsonMatch.LeagueID).First();
                 matches.Add(new LiveMatch
                 {
                     ID = jsonMatch.ID,
-                    LeagueID = jsonMatch.LeagueID,
+                    Tournament = new Tournament
+                    {
+                        ID = tournament.ID,
+                        Name = tournament.Name.Replace("_", " "),
+                        TicketItemID = tournament.TicketItemID,
+                    },
                     RadiantSeriesWins = jsonMatch.RadiantSeriesWins,
                     DireSeriesWins = jsonMatch.DireSeriesWins,
                     Duration = new TimeSpan(0, 0, jsonMatch.ScoreBoard.Duration),
@@ -123,6 +138,22 @@ namespace DataManager
 
         private Team convertJsonTeamToTeam(JsonTeam team, JsonTeamProfile teamProfile, IEnumerable<Player> players, IEnumerable<ProPlayer> accounts)
         {
+            if (team == null)
+            {
+                //This occurs when the game is in the drafting stage & no heroes have been picked
+                return new Team
+                {
+                    Players = players,
+                    OfficialTeam = new OfficialTeam
+                    {
+                        ID = teamProfile.ID,
+                        Name = teamProfile.Name,
+                        LogoURL = accessor.GetImageURL(teamProfile.LogoID),
+                        CaptainID = teamProfile.CaptainID,
+                        Players = accounts
+                    }
+                };
+            }
             if (team.HeroPicks == null)
             {
                 team.HeroPicks = new int[0];

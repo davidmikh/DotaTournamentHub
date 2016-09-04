@@ -54,7 +54,7 @@ namespace WindowsInterface
             // long-running startup tasks go here
             await Task.Delay(5000);
 
-            NavigationService.Navigate(typeof(Views.UpcomingGamesPage));
+            NavigationService.Navigate(typeof(Views.LiveGamesPage));
             await Task.CompletedTask;
         }
     }

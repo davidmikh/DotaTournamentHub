@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WindowsInterface.Models
+namespace CoreDataModels
 {
-    public class TournamentModel
+    public class Tournament
     {
-        public string Name { get; set; }
         public long ID { get; set; }
-        public List<MatchModel> Matches { get; set; }
+        public string Name { get; set; }
+        public long TicketItemID { get; set; }
     }
 }

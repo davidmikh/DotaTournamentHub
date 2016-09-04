@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace WindowsInterface.Models
 {
-    public class TournamentModel
+    public class TeamModel
     {
-        public string Name { get; set; }
         public long ID { get; set; }
-        public List<MatchModel> Matches { get; set; }
+        public string Name { get; set; }
+        public Uri LogoURL { get; set; }
     }
 }

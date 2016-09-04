@@ -15,9 +15,16 @@
 
         <Controls:HamburgerMenu.PrimaryButtons>
             <!--  upcomingGamesPage button  -->
-            <Controls:HamburgerButtonInfo ClearHistory="True" PageType="views:UpcomingGamesPage" 
-                                          AutomationProperties.Name="Jerry"
-                                          >
+            <Controls:HamburgerButtonInfo ClearHistory="True" PageType="views:LiveGamesPage">
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Width="48" Height="48"
+                                Symbol="Home" />
+                    <TextBlock Margin="12,0,0,0" VerticalAlignment="Center"
+                               Text="Live Games" />
+                </StackPanel>
+            </Controls:HamburgerButtonInfo>
+            <!--  upcomingGamesPage button  -->
+            <Controls:HamburgerButtonInfo ClearHistory="True" PageType="views:UpcomingGamesPage">
                 <StackPanel Orientation="Horizontal">
                     <SymbolIcon Width="48" Height="48"
                                 Symbol="Home" />
