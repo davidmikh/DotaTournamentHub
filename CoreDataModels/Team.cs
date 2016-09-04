@@ -14,6 +14,6 @@ namespace CoreDataModels
         public int TowerState { get; set; }
         public int BarracksState { get; set; }
         public OfficialTeam OfficialTeam { get; set; }
-        IEnumerable<Player> Players { get; set; }
+        public IEnumerable<Player> Players { get; set; }
     }
 }

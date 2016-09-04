@@ -8,7 +8,7 @@ namespace CoreDataModels
 {
     public class Player
     {
-        public ProPlayer ProPlayer { get; set; }
+        public long AccountID { get; set; }
         public string Hero { get; set; }
         public int Slot { get; set; }
         public int Kills { get; set; }
@@ -22,6 +22,7 @@ namespace CoreDataModels
         public int XPM { get; set; }
         public int UltimateState { get; set; }
         public int UltimateCD { get; set; }
+        //TODO: Items currently not useful because of Valve API. An empty slot has the same item ID as a blink dagger, no way to tell the difference
         public string[] Items { get; set; }
         public int RespawnTime { get; set; }
         public double PositionX { get; set; }

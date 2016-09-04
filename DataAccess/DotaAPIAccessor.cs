@@ -137,7 +137,33 @@ namespace DataAccess
             }
         }
 
-        //TODO: Get Player info function from PlayerID
-        //TODO: Get Item info function from ItemID
+        public IEnumerable<string> GetItems()
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseAddress);
+                var response = client.GetAsync(string.Format("IEconDOTA2_{0}/GetGameItems/v1?key={1}&language={2}", gameID, devKey, languageCode)).Result;
+                JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["result"];
+                List<string> items = new List<string>();
+                items.AddRange(json["items"].OrderBy(t => (int)t["id"]).Select(t => (string)t["localized_name"]));
+                return items;
+            }
+        }
+
+        public JsonAccount GetAccountInfo(long accountID)
+        {
+            //Convert the accountID from 32 bit to 64 bit if necessary.
+            if (accountID < 76561197960265728)
+            {
+                accountID += 76561197960265728;
+            }
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseAddress);
+                var response = client.GetAsync(string.Format("ISteamUser/GetPlayerSummaries/v0002?key={0}&steamids={1}", devKey, accountID)).Result;
+                JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["response"]["players"].First();
+                return new JsonAccount(json);
+            }
+        }
     }
 }

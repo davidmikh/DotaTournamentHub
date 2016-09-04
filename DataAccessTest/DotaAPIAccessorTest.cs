@@ -48,14 +48,30 @@ namespace DataAccessTest
         public void GetTeamInfo(long teamID, string teamName)
         {
             var teamInfo = accessor.GetTeamInfo(teamID);
-            Assert.AreEqual(teamInfo.Name, teamName);
+            Assert.AreEqual(teamName, teamInfo.Name);
         }
 
         [TestMethod]
         public void GetHeroes()
         {
             var heroes = accessor.GetHeroes();
-            Assert.AreEqual(heroes.Last(), "Arc Warden");
+            Assert.AreEqual("Anti-Mage", heroes.First());
+        }
+
+        [TestMethod]
+        public void GetItems()
+        {
+            var items = accessor.GetItems();
+            Assert.AreEqual("Blink Dagger", items.First());
+        }
+
+        [DataTestMethod]
+        [DataRow(70388657, "Dendi")]
+        [DataRow(76561197960265728 + 70388657, "Dendi")]
+        public void GetAccountInfo(long accountID, string name)
+        {
+            var account = accessor.GetAccountInfo(accountID);
+            Assert.AreEqual(name, account.Name);
         }
     }
 }
