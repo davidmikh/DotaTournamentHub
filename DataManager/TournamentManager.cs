@@ -11,23 +11,31 @@ namespace DataManager
     public class TournamentManager
     {
         private DotaAPIAccessor accessor;
+        private string[] heroes;
 
         public TournamentManager()
         {
             accessor = new DotaAPIAccessor();
+            //Try to get this info from cache first, then get it from API and save to cache if that fails
+            heroes = accessor.GetHeroes().ToArray();
         }
 
         public IEnumerable<Match> GetLiveTournamentGames()
         {
             var jsonMatches = accessor.GetAllLiveTournamentGames();
             //This filters out all unofficial teams in games like FACEIT Leagues
-            jsonMatches = jsonMatches.Where(t => t.Radiant != null && t.Dire != null);
+            jsonMatches = jsonMatches.Where(t => t.Radiant.Name != null && t.Dire.Name != null);
             List<LiveMatch> matches = new List<LiveMatch>();
             //Convert the mathes from their Json form to a more useful object
             foreach (var jsonMatch in jsonMatches)
             {
                 var radiant = accessor.GetTeamInfo(jsonMatch.Radiant.ID);
                 var dire = accessor.GetTeamInfo(jsonMatch.Dire.ID);
+                if (radiant == null || dire == null)
+                {
+                    //At least one of the teams isn't an official valve registered team meaning this can't be a tournament game
+                    continue;
+                }
                 matches.Add(new LiveMatch
                 {
                     ID = jsonMatch.ID,
@@ -43,8 +51,8 @@ namespace DataManager
                         Kills = jsonMatch.ScoreBoard.Radiant.Score,
                         BarracksState = jsonMatch.ScoreBoard.Radiant.BarracksState,
                         TowerState = jsonMatch.ScoreBoard.Radiant.TowerState,
-                        //TODO: Picks
-                        //TODO: Bans
+                        Picks = jsonMatch.ScoreBoard.Radiant.HeroPicks.Select(t => heroes[t]).ToArray(),
+                        Bans = jsonMatch.ScoreBoard.Radiant.HeroBans.Select(t => heroes[t]).ToArray(),
                         OfficialTeam = new OfficialTeam
                         {
                             ID = radiant.ID,
@@ -59,8 +67,8 @@ namespace DataManager
                         Kills = jsonMatch.ScoreBoard.Dire.Score,
                         BarracksState = jsonMatch.ScoreBoard.Dire.BarracksState,
                         TowerState = jsonMatch.ScoreBoard.Dire.TowerState,
-                        //TODO: Picks
-                        //TODO: Bans
+                        Picks = jsonMatch.ScoreBoard.Dire.HeroPicks.Select(t => heroes[t]).ToArray(),
+                        Bans = jsonMatch.ScoreBoard.Dire.HeroBans.Select(t => heroes[t]).ToArray(),
                         OfficialTeam = new OfficialTeam
                         {
                             ID = dire.ID,

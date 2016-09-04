@@ -19,6 +19,7 @@ namespace DataAccess
         private string devKey;
         private string gameID;
         private string baseAddress;
+        private string languageCode;
 
         public DotaAPIAccessor()
         {
@@ -29,6 +30,8 @@ namespace DataAccess
             }
             gameID = "570";
             baseAddress = "http://api.steampowered.com/";
+            //This can be changed to be modified in the future depending on the user's language. Default to english
+            languageCode = "en";
         }
 
         public IEnumerable<JsonTournament> GetAllTournaments()
@@ -81,6 +84,11 @@ namespace DataAccess
             {
                 client.BaseAddress = new Uri(baseAddress);
                 var response = client.GetAsync(string.Format("ISteamRemoteStorage/GetUGCFileDetails/v1?key={0}&appid={1}&ugcid={2}", devKey, gameID, imageID)).Result;
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    //The team does not have a logo or the logo doesn't exist
+                    return null;
+                }
                 JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["data"];
                 return new Uri((string)json["url"]);
             }
@@ -107,9 +115,29 @@ namespace DataAccess
                     }
                 }
                 
-                JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["result"]["teams"].First();
+                JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["result"]["teams"].FirstOrDefault();
+                if (json == null)
+                {
+                    return null;
+                }
                 return new JsonTeamProfile(json, teamID);
             }
         }
+
+        public IEnumerable<string> GetHeroes()
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseAddress);
+                var response = client.GetAsync(string.Format("IEconDOTA2_{0}/GetHeroes/v1?key={1}&language={2}", gameID, devKey, languageCode)).Result;
+                JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["result"];
+                List<string> heroes = new List<string>();
+                heroes.AddRange(json["heroes"].OrderBy(t => (int)t["id"]).Select(t => (string) t["localized_name"]));
+                return heroes;
+            }
+        }
+
+        //TODO: Get Player info function from PlayerID
+        //TODO: Get Item info function from ItemID
     }
 }

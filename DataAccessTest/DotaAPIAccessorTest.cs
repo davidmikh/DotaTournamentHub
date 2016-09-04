@@ -50,5 +50,12 @@ namespace DataAccessTest
             var teamInfo = accessor.GetTeamInfo(teamID);
             Assert.AreEqual(teamInfo.Name, teamName);
         }
+
+        [TestMethod]
+        public void GetHeroes()
+        {
+            var heroes = accessor.GetHeroes();
+            Assert.AreEqual(heroes.Last(), "Arc Warden");
+        }
     }
 }
