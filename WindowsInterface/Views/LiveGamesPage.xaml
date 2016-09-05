@@ -64,7 +64,7 @@
                 <DataTemplate>
                     <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
                         <RelativePanel HorizontalAlignment="Stretch">
-                            <Button Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
+                            <Button Name="TournamentBtn" Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
                                 <Button.Content>
                                     <TextBlock Text="{Binding Name}" Margin="5, 5, 5, 5" FontSize="20"></TextBlock>
                                 </Button.Content>
@@ -74,7 +74,7 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <RelativePanel HorizontalAlignment="Stretch">
-                                        <Button Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="25, 0, 0, 0">
+                                        <Button Name="MatchBtn" Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="25, 0, 0, 0">
                                             <Button.Content>
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
                                                     <Image Source="{Binding Radiant.LogoURL}" Width="50" Height="50"></Image>

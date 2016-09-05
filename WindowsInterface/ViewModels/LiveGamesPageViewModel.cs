@@ -19,9 +19,6 @@ namespace WindowsInterface.ViewModels
 
         public LiveGamesPageViewModel()
         {
-            tournamentManager = new TournamentManager();
-            _Tournaments = new List<TournamentModel>();
-
             //Used to easily display information in the xaml editor without launching the program
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
@@ -95,6 +92,9 @@ namespace WindowsInterface.ViewModels
             }
             else
             {
+                tournamentManager = new TournamentManager();
+                _Tournaments = new List<TournamentModel>();
+
                 var liveGames = tournamentManager.GetLiveTournamentGames();
                 var tournaments = liveGames.GroupBy(t => t.Tournament.ID);
 
