@@ -132,6 +132,8 @@ namespace DataAccess
                 var response = client.GetAsync(string.Format("IEconDOTA2_{0}/GetHeroes/v1?key={1}&language={2}", gameID, devKey, languageCode)).Result;
                 JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["result"];
                 List<string> heroes = new List<string>();
+                //A hero ID of 0 means the player has not yet selected a hero
+                heroes.Add("None");
                 heroes.AddRange(json["heroes"].OrderBy(t => (int)t["id"]).Select(t => (string) t["localized_name"]));
                 return heroes;
             }
@@ -145,6 +147,8 @@ namespace DataAccess
                 var response = client.GetAsync(string.Format("IEconDOTA2_{0}/GetGameItems/v1?key={1}&language={2}", gameID, devKey, languageCode)).Result;
                 JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["result"];
                 List<string> items = new List<string>();
+                //An item ID of 0 means the item slot is empty
+                items.Add("Empty");
                 items.AddRange(json["items"].OrderBy(t => (int)t["id"]).Select(t => (string)t["localized_name"]));
                 return items;
             }

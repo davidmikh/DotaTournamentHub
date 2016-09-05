@@ -124,7 +124,7 @@ namespace WindowsInterface.ViewModels
                     {
                         ID = tournament.Key,
                         Name = tournament.Select(t => t.Tournament.Name).First(),
-                        Matches = matches
+                        Matches = matches,
                     });
                 }
             }
