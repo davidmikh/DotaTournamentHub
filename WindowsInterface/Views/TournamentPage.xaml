@@ -53,70 +53,73 @@
                              RelativePanel.AlignTopWithPanel="True" Text="{Binding Tournament.Name}" />
 
         <!--  content  -->
-        <TextBlock x:Name="liveMatchesTxtBlock" Text="Live Matches" Margin="5, 5, 5, 5" FontSize="20" RelativePanel.Below="pageHeader" 
+        <ScrollViewer RelativePanel.Below="pageHeader" VerticalScrollBarVisibility="Visible" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
+            <StackPanel>
+                <TextBlock x:Name="liveMatchesTxtBlock" Text="Live Matches" Margin="5, 5, 5, 5" FontSize="20" RelativePanel.Below="pageHeader" 
                    RelativePanel.AlignLeftWithPanel="true" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignHorizontalCenterWithPanel="True"></TextBlock>
-        <ItemsControl x:Name="liveMatchesItemsControl"
+                <ItemsControl x:Name="liveMatchesItemsControl"
                       ItemsSource="{Binding LiveMatches}"
                       RelativePanel.Below="liveMatchesTxtBlock"
                       RelativePanel.AlignLeftWithPanel="True"
                       RelativePanel.AlignRightWithPanel="True"
                       RelativePanel.AlignHorizontalCenterWithPanel="True">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
-                        <RelativePanel HorizontalAlignment="Stretch">
-                            <Button Name="MatchBtn" Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="25, 0, 0, 0">
-                                <Button.Content>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                                        <Image Source="{Binding Radiant.LogoURL, Mode=OneWay, FallbackValue=N/A}" Width="50" Height="50"></Image>
-                                        <TextBlock Text="{Binding Radiant.Name, Mode=OneWay, FallbackValue=N/A}" Margin="5, 5, 5, 5" FontSize="20"></TextBlock>
-                                        <TextBlock Text=" vs " Margin="5, 5, 5, 5" FontSize="20"></TextBlock>
-                                        <Image Source="{Binding Dire.LogoURL, Mode=OneWay, FallbackValue=N/A}" Width="50" Height="50"></Image>
-                                        <TextBlock Text="{Binding Dire.Name, Mode=OneWay, FallbackValue=N/A}" Margin="5, 5, 5, 5" FontSize="20"></TextBlock>
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
-                        </RelativePanel>
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <Core:EventTriggerBehavior>
-                <Behaviors:FocusAction />
-            </Core:EventTriggerBehavior>
-        </ItemsControl>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+                                <RelativePanel HorizontalAlignment="Stretch">
+                                    <Button Name="MatchBtn" Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="25, 0, 0, 0">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                                <Image Source="{Binding Radiant.LogoURL, Mode=OneWay, FallbackValue=N/A}" Width="50" Height="50"></Image>
+                                                <TextBlock Text="{Binding Radiant.Name, Mode=OneWay, FallbackValue=N/A}" Margin="5, 5, 5, 5" FontSize="20"></TextBlock>
+                                                <TextBlock Text=" vs " Margin="5, 5, 5, 5" FontSize="20"></TextBlock>
+                                                <Image Source="{Binding Dire.LogoURL, Mode=OneWay, FallbackValue=N/A}" Width="50" Height="50"></Image>
+                                                <TextBlock Text="{Binding Dire.Name, Mode=OneWay, FallbackValue=N/A}" Margin="5, 5, 5, 5" FontSize="20"></TextBlock>
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                </RelativePanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <Core:EventTriggerBehavior>
+                        <Behaviors:FocusAction />
+                    </Core:EventTriggerBehavior>
+                </ItemsControl>
 
-        <TextBlock x:Name="completedMatchesTxtBlock" Text="Completed Matches" Margin="5, 5, 5, 5" FontSize="20" RelativePanel.Below="liveMatchesItemsControl" 
+                <TextBlock x:Name="completedMatchesTxtBlock" Text="Completed Matches" Margin="5, 5, 5, 5" FontSize="20" RelativePanel.Below="liveMatchesItemsControl" 
                    RelativePanel.AlignLeftWithPanel="true" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignHorizontalCenterWithPanel="True"></TextBlock>
-        <ItemsControl x:Name="pastMatchesItemsControl"
+                <ItemsControl x:Name="pastMatchesItemsControl"
                       ItemsSource="{Binding Tournament.Matches}"
                       RelativePanel.Below="completedMatchesTxtBlock"
                       RelativePanel.AlignLeftWithPanel="True"
                       RelativePanel.AlignRightWithPanel="True"
                       RelativePanel.AlignHorizontalCenterWithPanel="True">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
-                        <RelativePanel HorizontalAlignment="Stretch">
-                            <Button Name="MatchBtn" Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="25, 0, 0, 0">
-                                <Button.Content>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                                        <Image Source="{Binding Radiant.LogoURL, Mode=OneWay, FallbackValue=N/A}" Width="50" Height="50"></Image>
-                                        <TextBlock Text="{Binding Radiant.Name, Mode=OneWay, FallbackValue=N/A}" Margin="5, 5, 5, 5" FontSize="20"></TextBlock>
-                                        <TextBlock Text=" vs " Margin="5, 5, 5, 5" FontSize="20"></TextBlock>
-                                        <Image Source="{Binding Dire.LogoURL, Mode=OneWay, FallbackValue=N/A}" Width="50" Height="50"></Image>
-                                        <TextBlock Text="{Binding Dire.Name, Mode=OneWay, FallbackValue=N/A}" Margin="5, 5, 5, 5" FontSize="20"></TextBlock>
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
-                        </RelativePanel>
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <Core:EventTriggerBehavior>
-                <Behaviors:FocusAction />
-            </Core:EventTriggerBehavior>
-        </ItemsControl>
-
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+                                <RelativePanel HorizontalAlignment="Stretch">
+                                    <Button Name="MatchBtn" Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="25, 0, 0, 0">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                                <Image Source="{Binding Radiant.LogoURL, Mode=OneWay, FallbackValue=N/A}" Width="50" Height="50"></Image>
+                                                <TextBlock Text="{Binding Radiant.Name, Mode=OneWay, FallbackValue=N/A}" Margin="5, 5, 5, 5" FontSize="20"></TextBlock>
+                                                <TextBlock Text=" vs " Margin="5, 5, 5, 5" FontSize="20"></TextBlock>
+                                                <Image Source="{Binding Dire.LogoURL, Mode=OneWay, FallbackValue=N/A}" Width="50" Height="50"></Image>
+                                                <TextBlock Text="{Binding Dire.Name, Mode=OneWay, FallbackValue=N/A}" Margin="5, 5, 5, 5" FontSize="20"></TextBlock>
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                </RelativePanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <Core:EventTriggerBehavior>
+                        <Behaviors:FocusAction />
+                    </Core:EventTriggerBehavior>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
     </RelativePanel>
 </Page>
 

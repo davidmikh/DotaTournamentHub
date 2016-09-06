@@ -53,49 +53,50 @@
                              RelativePanel.AlignTopWithPanel="True" Text="Live Games">
 
         </controls:PageHeader>
-
-        <ItemsControl x:Name="gamesItemsControl"
+        <ScrollViewer RelativePanel.Below="pageHeader" VerticalScrollBarVisibility="Visible" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
+            <ItemsControl x:Name="gamesItemsControl"
                       ItemsSource="{Binding Tournaments}"
                       RelativePanel.Below="pageHeader"
                       RelativePanel.AlignLeftWithPanel="True"
                       RelativePanel.AlignRightWithPanel="True"
                       RelativePanel.AlignHorizontalCenterWithPanel="True">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
-                        <RelativePanel HorizontalAlignment="Stretch">
-                            <Button Name="TournamentBtn" Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Click="TournamentBtnClick" CommandParameter="{Binding ID}">
-                                <Button.Content>
-                                    <TextBlock Text="{Binding Name}" Margin="5, 5, 5, 5" FontSize="20"></TextBlock>
-                                </Button.Content>
-                            </Button>
-                        </RelativePanel>
-                        <ItemsControl ItemsSource="{Binding Matches}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <RelativePanel HorizontalAlignment="Stretch">
-                                        <Button Name="MatchBtn" Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="25, 0, 0, 0">
-                                            <Button.Content>
-                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                                                    <Image Source="{Binding Radiant.LogoURL}" Width="50" Height="50"></Image>
-                                                    <TextBlock Text="{Binding Radiant.Name}" Margin="5, 5, 5, 5" FontSize="20"></TextBlock>
-                                                    <TextBlock Text=" vs " Margin="5, 5, 5, 5" FontSize="20"></TextBlock>
-                                                    <Image Source="{Binding Dire.LogoURL}" Width="50" Height="50"></Image>
-                                                    <TextBlock Text="{Binding Dire.Name}" Margin="5, 5, 5, 5" FontSize="20"></TextBlock>
-                                                </StackPanel>
-                                            </Button.Content>
-                                        </Button>
-                                    </RelativePanel>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <Core:EventTriggerBehavior>
-                <Behaviors:FocusAction />
-            </Core:EventTriggerBehavior>
-        </ItemsControl>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+                            <RelativePanel HorizontalAlignment="Stretch">
+                                <Button Name="TournamentBtn" Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Click="TournamentBtnClick" CommandParameter="{Binding ID}">
+                                    <Button.Content>
+                                        <TextBlock Text="{Binding Name}" Margin="5, 5, 5, 5" FontSize="20"></TextBlock>
+                                    </Button.Content>
+                                </Button>
+                            </RelativePanel>
+                            <ItemsControl ItemsSource="{Binding Matches}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <RelativePanel HorizontalAlignment="Stretch">
+                                            <Button Name="MatchBtn" Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="25, 0, 0, 0">
+                                                <Button.Content>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                                        <Image Source="{Binding Radiant.LogoURL}" Width="50" Height="50"></Image>
+                                                        <TextBlock Text="{Binding Radiant.Name}" Margin="5, 5, 5, 5" FontSize="20"></TextBlock>
+                                                        <TextBlock Text=" vs " Margin="5, 5, 5, 5" FontSize="20"></TextBlock>
+                                                        <Image Source="{Binding Dire.LogoURL}" Width="50" Height="50"></Image>
+                                                        <TextBlock Text="{Binding Dire.Name}" Margin="5, 5, 5, 5" FontSize="20"></TextBlock>
+                                                    </StackPanel>
+                                                </Button.Content>
+                                            </Button>
+                                        </RelativePanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <Core:EventTriggerBehavior>
+                    <Behaviors:FocusAction />
+                </Core:EventTriggerBehavior>
+            </ItemsControl>
+        </ScrollViewer>
     </RelativePanel>
 </Page>
 

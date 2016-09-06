@@ -105,7 +105,7 @@ namespace WindowsInterface.ViewModels
             //a function in this class that will update the value of Tournament.Matches so that it can be done after page load
             //2) Replace GetMatchesForTournament with another function that doesn't need to call GetMatchDetails for each match in GetMatchHistory. Use the info we get instead from
             //GetMatchHistory to make some basic display somehow, won't be as good as the LiveGames one but at least it will be way faster. Keep the old function in case you ever need it.
-            var pastMatches = tournamentManager.GetMatchesForTournament(id).Where(t => t.Dire.OfficialTeam.Name != null && t.Radiant.OfficialTeam.Name != null);
+            var pastMatches = tournamentManager.GetMatchesForTournament(id);
             var liveJsonMatches = tournamentManager.GetLiveTournamentGames().Where(t => t.Tournament.ID == id);
             ObservableCollection<MatchModel> matches = new ObservableCollection<MatchModel>();
             ObservableCollection<MatchModel> liveMatches = new ObservableCollection<MatchModel>();
