@@ -8,6 +8,7 @@ using Windows.UI.Xaml.Navigation;
 using WindowsInterface.Models;
 using CoreDataModels;
 using DataManager;
+using System.Collections.ObjectModel;
 
 namespace WindowsInterface.ViewModels
 {
@@ -28,7 +29,7 @@ namespace WindowsInterface.ViewModels
                     {
                         ID = 4664,
                         Name = "The International 2016",
-                        Matches = new List<MatchModel>
+                        Matches = new ObservableCollection<MatchModel>
                         {
                             new MatchModel
                             {
@@ -68,7 +69,7 @@ namespace WindowsInterface.ViewModels
                     {
                         ID = 3781,
                         Name = "The Summit 4",
-                        Matches = new List<MatchModel>
+                        Matches = new ObservableCollection<MatchModel>
                         {
                             new MatchModel
                             {
@@ -100,7 +101,7 @@ namespace WindowsInterface.ViewModels
 
                 foreach (var tournament in tournaments)
                 {
-                    var matches = new List<MatchModel>();
+                    var matches = new ObservableCollection<MatchModel>();
                     foreach (var match in tournament)
                     {
                         matches.Add(new MatchModel
@@ -124,7 +125,7 @@ namespace WindowsInterface.ViewModels
                     {
                         ID = tournament.Key,
                         Name = tournament.Select(t => t.Tournament.Name).First(),
-                        Matches = matches,
+                        Matches = matches
                     });
                 }
             }

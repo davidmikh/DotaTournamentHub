@@ -67,19 +67,28 @@ namespace DataAccess.Models
                 RadiantTeamID = (long)json["radiant_team_id"];
                 RadiantName = (string)json["radiant_name"];
                 RadiantLogoID = (long)json["radiant_logo"];
-                RadiantCaptainID = (long)json["radiant_captain"];
+                if (json["radiant_captain"] != null)
+                {
+                    RadiantCaptainID = (long)json["radiant_captain"];
+                }
             }
             if (json["dire_team_id"] != null)
             {
                 DireTeamID = (long)json["dire_team_id"];
                 DireName = (string)json["dire_name"];
                 DireLogoID = (long)json["dire_logo"];
-                DireCaptainID = (long)json["dire_captain"];
+                if (json["dire_captain"] != null)
+                {
+                    DireCaptainID = (long)json["dire_captain"];
+                }
             }
-            RadiantPicks = json["picks_bans"].Where(t => (bool)t["is_pick"] == true && (int)t["team"] == 0).Select(t => (int)t["hero_id"]).ToArray();
-            RadiantBans = json["picks_bans"].Where(t => (bool)t["is_pick"] == false && (int)t["team"] == 0).Select(t => (int)t["hero_id"]).ToArray();
-            DirePicks = json["picks_bans"].Where(t => (bool)t["is_pick"] == true && (int)t["team"] == 1).Select(t => (int)t["hero_id"]).ToArray();
-            DireBans = json["picks_bans"].Where(t => (bool)t["is_pick"] == false && (int)t["team"] == 1).Select(t => (int)t["hero_id"]).ToArray();
+            if (json["picks_bans"] != null)
+            {
+                RadiantPicks = json["picks_bans"].Where(t => (bool)t["is_pick"] == true && (int)t["team"] == 0).Select(t => (int)t["hero_id"]).ToArray();
+                RadiantBans = json["picks_bans"].Where(t => (bool)t["is_pick"] == false && (int)t["team"] == 0).Select(t => (int)t["hero_id"]).ToArray();
+                DirePicks = json["picks_bans"].Where(t => (bool)t["is_pick"] == true && (int)t["team"] == 1).Select(t => (int)t["hero_id"]).ToArray();
+                DireBans = json["picks_bans"].Where(t => (bool)t["is_pick"] == false && (int)t["team"] == 1).Select(t => (int)t["hero_id"]).ToArray();
+            }
         }
     }
 }

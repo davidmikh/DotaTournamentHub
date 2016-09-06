@@ -64,7 +64,7 @@
                 <DataTemplate>
                     <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
                         <RelativePanel HorizontalAlignment="Stretch">
-                            <Button Name="TournamentBtn" Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
+                            <Button Name="TournamentBtn" Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Click="TournamentBtnClick" CommandParameter="{Binding ID}">
                                 <Button.Content>
                                     <TextBlock Text="{Binding Name}" Margin="5, 5, 5, 5" FontSize="20"></TextBlock>
                                 </Button.Content>

@@ -34,6 +34,14 @@ namespace DataAccessTest
         }
 
         [DataTestMethod]
+        [DataRow(4664, 217)]
+        public void GetMatchIDsForTournament(long tournamentID, int numMatches)
+        {
+            var matches = accessor.GetMatchIDsForTournament(tournamentID);
+            Assert.AreEqual(numMatches, matches.Count());
+        }
+
+        [DataTestMethod]
         [DataRow(451783905032671206, "http://cloud-3.steamusercontent.com/ugc/451783905032671206/4CBD3B9B03D9515A20D471437EF0FEB81363C198/")]
         public void GetImageURL(long imageID, string uri)
         {

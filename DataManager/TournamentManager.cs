@@ -25,7 +25,7 @@ namespace DataManager
             tournaments = accessor.GetAllTournaments();
         }
 
-        public IEnumerable<Match> GetLiveTournamentGames()
+        public IEnumerable<LiveMatch> GetLiveTournamentGames()
         {
             var jsonMatches = accessor.GetAllLiveTournamentGames();
             //This filters out all unofficial teams in games like FACEIT Leagues
@@ -45,19 +45,13 @@ namespace DataManager
                 List<ProPlayer> direAccounts = new List<ProPlayer>();
                 List<Player> radiantPlayers = new List<Player>();
                 List<Player> direPlayers = new List<Player>();
-                foreach (var id in radiant.PlayerIDs)
-                {
-                    radiantAccounts.Add(convertJsonAccountToProPlayer(accessor.GetAccountInfo(id)));
-                }
-                foreach (var id in dire.PlayerIDs)
-                {
-                    direAccounts.Add(convertJsonAccountToProPlayer(accessor.GetAccountInfo(id)));
-                }
+                //TODO: Bring this back to before where players & accounts were split. New version isn't as ideal for live games
                 //This can be null when the game is live but still in the drafting stage and no hero has been picked
                 if (jsonMatch.ScoreBoard.Radiant != null)
                 {
                     foreach (var player in jsonMatch.ScoreBoard.Radiant.Players)
                     {
+                        radiantAccounts.Add(convertJsonAccountToProPlayer(accessor.GetAccountInfo(player.AccountID)));
                         radiantPlayers.Add(convertJsonPlayerToPlayer(player));
                     }
                 }
@@ -65,6 +59,7 @@ namespace DataManager
                 {
                     foreach (var player in jsonMatch.ScoreBoard.Dire.Players)
                     {
+                        direAccounts.Add(convertJsonAccountToProPlayer(accessor.GetAccountInfo(player.AccountID)));
                         direPlayers.Add(convertJsonPlayerToPlayer(player));
                     }
                 }
@@ -89,6 +84,100 @@ namespace DataManager
                 });
             }
 
+            return matches;
+        }
+
+        public IEnumerable<PastMatch> GetMatchesForTournament(long tournamentID)
+        {
+            var matchIDs = accessor.GetMatchIDsForTournament(tournamentID);
+            List<PastMatch> matches = new List<PastMatch>();
+            var tournament = tournaments.Where(t => t.ID == tournamentID).First();
+            if (tournament == null)
+            {
+                return null;
+            }
+            foreach (var matchID in matchIDs)
+            {
+                var jsonMatch = accessor.GetMatch(matchID);
+                List<ProPlayer> radiantAccounts = new List<ProPlayer>();
+                List<ProPlayer> direAccounts = new List<ProPlayer>();
+                List<Player> radiantPlayers = new List<Player>();
+                List<Player> direPlayers = new List<Player>();
+                //The player slot is an 8-bit unsigned integer where the first bit represents the player team - 1 if Dire, 0 if Radiant
+                foreach (var player in jsonMatch.Players.Where(t => t.Slot < 128))
+                {
+                    radiantAccounts.Add(convertJsonAccountToProPlayer(accessor.GetAccountInfo(player.AccountID)));
+                    radiantPlayers.Add(convertJsonPlayerToPlayer(player));
+                }
+                foreach (var player in jsonMatch.Players.Where(t => t.Slot >= 128))
+                {
+                    direAccounts.Add(convertJsonAccountToProPlayer(accessor.GetAccountInfo(player.AccountID)));
+                    radiantPlayers.Add(convertJsonPlayerToPlayer(player));
+                }
+                string[] radiantPicks = new string[0];
+                string[] radiantBans = new string[0];
+                string[] direPicks = new string[0];
+                string[] direBans = new string[0];
+                //This means the match was in captains mode so there are picks/bans
+                if (jsonMatch.GameMode == 2)
+                {
+                    radiantPicks = jsonMatch.RadiantPicks.Select(t => heroes[t]).ToArray();
+                    radiantBans = jsonMatch.RadiantBans.Select(t => heroes[t]).ToArray();
+                    direPicks = jsonMatch.DirePicks.Select(t => heroes[t]).ToArray();
+                    direBans = jsonMatch.DireBans.Select(t => heroes[t]).ToArray();
+                }
+                //TODO: Exception happens here in adding matches. Its one of the commented out lines
+                matches.Add(new PastMatch
+                {
+                    ID = jsonMatch.ID,
+                    Tournament = new Tournament
+                    {
+                        ID = tournamentID,
+                        Name = tournament.Name.Replace("_", " "),
+                        TicketItemID = tournament.TicketItemID,
+                    },
+                    GameType = jsonMatch.GameMode,
+                    IsSourceTwo = Convert.ToBoolean(jsonMatch.Engine),
+                    ServerClusterNum = jsonMatch.ServerClusterNum,
+                    RadiantVictory = jsonMatch.RadiantWin,
+                    StartTime = jsonMatch.StartTime,
+                    Duration = jsonMatch.Duration,
+                    Radiant = new Team
+                    {
+                        Kills = jsonMatch.RadiantKills,
+                        BarracksState = jsonMatch.RadiantBarracksState,
+                        TowerState = jsonMatch.RadiantTowerState,
+                        Picks = radiantPicks,
+                        Bans = radiantBans,
+                        Players = radiantPlayers,
+                        OfficialTeam = new OfficialTeam
+                        {
+                            CaptainID = jsonMatch.RadiantCaptainID,
+                            ID = jsonMatch.RadiantTeamID,
+                            LogoURL = accessor.GetImageURL(jsonMatch.RadiantLogoID),
+                            Name = jsonMatch.RadiantName,
+                            Players = radiantAccounts,
+                        }
+                    },
+                    Dire = new Team
+                    {
+                        Kills = jsonMatch.DireKills,
+                        BarracksState = jsonMatch.DireBarracksState,
+                        TowerState = jsonMatch.DireTowerState,
+                        Picks = direPicks,
+                        Bans = direBans,
+                        Players = direPlayers,
+                        OfficialTeam = new OfficialTeam
+                        {
+                            CaptainID = jsonMatch.DireCaptainID,
+                            ID = jsonMatch.DireTeamID,
+                            LogoURL = accessor.GetImageURL(jsonMatch.DireLogoID),
+                            Name = jsonMatch.DireName,
+                            Players = direAccounts,
+                        }
+                    }
+                });
+            }
             return matches;
         }
 

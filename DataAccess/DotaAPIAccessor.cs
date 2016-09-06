@@ -72,9 +72,46 @@ namespace DataAccess
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri(baseAddress);
-                var response = client.GetAsync(string.Format("IDOTA2Match_{0}/GetMatchDetails/v1?key={1}&match_id={2}", gameID, devKey, matchID)).Result;
+                bool success = false;
+                HttpResponseMessage response = null;
+                while (!success)
+                {
+                    response = client.GetAsync(string.Format("IDOTA2Match_{0}/GetMatchDetails/v1?key={1}&match_id={2}", gameID, devKey, matchID)).Result;
+                    switch (response.StatusCode)
+                    {
+                        case HttpStatusCode.OK:
+                            success = true;
+                            break;
+                        case HttpStatusCode.ServiceUnavailable:
+                            //We may have been sending too many requests or the service is temporarily down. Try again
+                            success = false;
+                            break;
+                        default:
+                            //A new unseen response message occured - should check it and create better error handling
+                            return null;
+                    }
+                }
                 JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["result"];
                 return new JsonMatch(json);
+            }
+        }
+
+        public IEnumerable<long> GetMatchIDsForTournament(long tournamentID)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseAddress);
+                //500 is the maximum number of games that can be requested
+                //It takes an absurdly long time to process even 20 games. For now limiting to 5
+                var response = client.GetAsync(string.Format("IDOTA2Match_{0}/GetMatchHistory/v1?key={1}&league_id={2}&matches_requested=5", gameID, devKey, tournamentID)).Result;
+                JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["result"];
+                json["matches"].OrderByDescending(t => (new TimeSpan((long)t["start_time"])));
+                List<long> matches = new List<long>();
+                foreach (var match in json["matches"])
+                {
+                    matches.Add((long)match["match_id"]);
+                }
+                return matches;
             }
         }
 
@@ -87,6 +124,11 @@ namespace DataAccess
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
                     //The team does not have a logo or the logo doesn't exist
+                    return null;
+                }
+                else if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    //Exception occured!
                     return null;
                 }
                 JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["data"];
@@ -109,12 +151,12 @@ namespace DataAccess
                         success = true;
                     }
                     //Keep trying to contact Valve's API in the event of a time out
-                    else if (response.ReasonPhrase == "Gateway Time-out")
+                    else if (response.StatusCode == HttpStatusCode.GatewayTimeout)
                     {
                         success = false;
                     }
                 }
-                
+
                 JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["result"]["teams"].FirstOrDefault();
                 if (json == null)
                 {
@@ -134,7 +176,7 @@ namespace DataAccess
                 List<string> heroes = new List<string>();
                 //A hero ID of 0 means the player has not yet selected a hero
                 heroes.Add("None");
-                heroes.AddRange(json["heroes"].OrderBy(t => (int)t["id"]).Select(t => (string) t["localized_name"]));
+                heroes.AddRange(json["heroes"].OrderBy(t => (int)t["id"]).Select(t => (string)t["localized_name"]));
                 return heroes;
             }
         }
@@ -164,9 +206,25 @@ namespace DataAccess
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri(baseAddress);
-                var response = client.GetAsync(string.Format("ISteamUser/GetPlayerSummaries/v0002?key={0}&steamids={1}", devKey, accountID)).Result;
-                JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["response"]["players"].First();
-                return new JsonAccount(json);
+                try
+                {
+                    var response = client.GetAsync(string.Format("ISteamUser/GetPlayerSummaries/v0002?key={0}&steamids={1}", devKey, accountID)).Result;
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        //exception happened
+                        return null;
+                    }
+                    JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["response"]["players"].First();
+                    return new JsonAccount(json);
+                }
+                catch (Exception e)
+                {
+                    //TEsting to see if exception is occuring here
+                    return null;
+                }
+                //var response = client.GetAsync(string.Format("ISteamUser/GetPlayerSummaries/v0002?key={0}&steamids={1}", devKey, accountID)).Result;
+                //JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["response"]["players"].First();
+                //return new JsonAccount(json);
             }
         }
     }
