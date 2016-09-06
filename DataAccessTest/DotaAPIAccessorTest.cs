@@ -37,7 +37,7 @@ namespace DataAccessTest
         [DataRow(4664, 217)]
         public void GetMatchIDsForTournament(long tournamentID, int numMatches)
         {
-            var matches = accessor.GetMatchIDsForTournament(tournamentID);
+            var matches = accessor.GetMatchIDsForTournament(tournamentID, numMatches);
             Assert.AreEqual(numMatches, matches.Count());
         }
 
@@ -63,14 +63,14 @@ namespace DataAccessTest
         public void GetHeroes()
         {
             var heroes = accessor.GetHeroes();
-            Assert.AreEqual("Anti-Mage", heroes.First());
+            Assert.AreEqual("Anti-Mage", heroes.ElementAt(1));
         }
 
         [TestMethod]
         public void GetItems()
         {
             var items = accessor.GetItems();
-            Assert.AreEqual("Blink Dagger", items.First());
+            Assert.AreEqual("Blink Dagger", items.ElementAt(1));
         }
 
         [DataTestMethod]

@@ -100,6 +100,11 @@ namespace WindowsInterface.ViewModels
         {
             id = (suspensionState.ContainsKey(nameof(id))) ? (long) suspensionState[nameof(id)] : (long)parameter;
             //TODO: Should be a way to optimize this so it isn't so slow to get tournament matches. Might need to do on manager level
+            //TODO: This can be improved by one of two ways, could potentially do both:
+            //1) Make this function, GetMatchesForTournament, asyncrhonous and give it a delegate as a parameter. The delegate will refer to
+            //a function in this class that will update the value of Tournament.Matches so that it can be done after page load
+            //2) Replace GetMatchesForTournament with another function that doesn't need to call GetMatchDetails for each match in GetMatchHistory. Use the info we get instead from
+            //GetMatchHistory to make some basic display somehow, won't be as good as the LiveGames one but at least it will be way faster. Keep the old function in case you ever need it.
             var pastMatches = tournamentManager.GetMatchesForTournament(id).Where(t => t.Dire.OfficialTeam.Name != null && t.Radiant.OfficialTeam.Name != null);
             var liveJsonMatches = tournamentManager.GetLiveTournamentGames().Where(t => t.Tournament.ID == id);
             ObservableCollection<MatchModel> matches = new ObservableCollection<MatchModel>();

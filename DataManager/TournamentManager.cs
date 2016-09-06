@@ -89,7 +89,8 @@ namespace DataManager
 
         public IEnumerable<PastMatch> GetMatchesForTournament(long tournamentID)
         {
-            var matchIDs = accessor.GetMatchIDsForTournament(tournamentID);
+            //TODO: For now only 5 matches since this function takes so long
+            var matchIDs = accessor.GetMatchIDsForTournament(tournamentID, 5);
             List<PastMatch> matches = new List<PastMatch>();
             var tournament = tournaments.Where(t => t.ID == tournamentID).First();
             if (tournament == null)
