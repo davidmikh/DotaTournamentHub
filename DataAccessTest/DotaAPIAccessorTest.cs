@@ -37,7 +37,7 @@ namespace DataAccessTest
         [DataRow(4664, 217)]
         public void GetMatchIDsForTournament(long tournamentID, int numMatches)
         {
-            var matches = accessor.GetMatchIDsForTournament(tournamentID, numMatches);
+            var matches = accessor.GetMatchesForTournament(tournamentID, numMatches);
             Assert.AreEqual(numMatches, matches.Count());
         }
 

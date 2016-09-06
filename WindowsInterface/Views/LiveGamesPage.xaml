@@ -53,7 +53,7 @@
                              RelativePanel.AlignTopWithPanel="True" Text="Live Games">
 
         </controls:PageHeader>
-        <ScrollViewer RelativePanel.Below="pageHeader" VerticalScrollBarVisibility="Visible" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
+        <ScrollViewer RelativePanel.Below="pageHeader" VerticalScrollBarVisibility="Auto" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
             <ItemsControl x:Name="gamesItemsControl"
                       ItemsSource="{Binding Tournaments}"
                       RelativePanel.Below="pageHeader"

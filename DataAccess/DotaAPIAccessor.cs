@@ -96,7 +96,7 @@ namespace DataAccess
             }
         }
 
-        public IEnumerable<long> GetMatchIDsForTournament(long tournamentID, int numMatches)
+        public IEnumerable<JsonBasicMatch> GetMatchesForTournament(long tournamentID, int numMatches)
         {
             using (HttpClient client = new HttpClient())
             {
@@ -105,16 +105,16 @@ namespace DataAccess
                 HttpResponseMessage response = null;
                 while (!success)
                 {
-                    //500 is the maximum number of games that can be requested
+                    //100 is the maximum number of games that can be requested at once
                     response = client.GetAsync(string.Format("IDOTA2Match_{0}/GetMatchHistory/v1?key={1}&league_id={2}&matches_requested={3}", gameID, devKey, tournamentID, numMatches)).Result;
                     success = handleResponse(response.StatusCode);
                 }
                 JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["result"];
-                json["matches"].OrderByDescending(t => (new TimeSpan((long)t["start_time"])));
-                List<long> matches = new List<long>();
-                foreach (var match in json["matches"])
+                var jsonMatches = json["matches"].Where(t => (int)t["radiant_team_id"] != 0 && (int)t["dire_team_id"] != 0).OrderByDescending(t => (new TimeSpan((long)t["start_time"])));
+                var matches = new List<JsonBasicMatch>();
+                foreach (var match in jsonMatches)
                 {
-                    matches.Add((long)match["match_id"]);
+                    matches.Add(new JsonBasicMatch(match));
                 }
                 return matches;
             }

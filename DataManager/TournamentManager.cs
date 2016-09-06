@@ -89,94 +89,30 @@ namespace DataManager
 
         public IEnumerable<PastMatch> GetMatchesForTournament(long tournamentID)
         {
-            //TODO: For now only 5 matches since this function takes so long
-            var matchIDs = accessor.GetMatchIDsForTournament(tournamentID, 5);
+            var jsonMatches = accessor.GetMatchesForTournament(tournamentID, 50);
             List<PastMatch> matches = new List<PastMatch>();
             var tournament = tournaments.Where(t => t.ID == tournamentID).First();
             if (tournament == null)
             {
                 return null;
             }
-            foreach (var matchID in matchIDs)
+            foreach (var match in jsonMatches)
             {
-                var jsonMatch = accessor.GetMatch(matchID);
-                List<ProPlayer> radiantAccounts = new List<ProPlayer>();
-                List<ProPlayer> direAccounts = new List<ProPlayer>();
-                List<Player> radiantPlayers = new List<Player>();
-                List<Player> direPlayers = new List<Player>();
-                //The player slot is an 8-bit unsigned integer where the first bit represents the player team - 1 if Dire, 0 if Radiant
-                foreach (var player in jsonMatch.Players.Where(t => t.Slot < 128))
-                {
-                    radiantAccounts.Add(convertJsonAccountToProPlayer(accessor.GetAccountInfo(player.AccountID)));
-                    radiantPlayers.Add(convertJsonPlayerToPlayer(player));
-                }
-                foreach (var player in jsonMatch.Players.Where(t => t.Slot >= 128))
-                {
-                    direAccounts.Add(convertJsonAccountToProPlayer(accessor.GetAccountInfo(player.AccountID)));
-                    radiantPlayers.Add(convertJsonPlayerToPlayer(player));
-                }
-                string[] radiantPicks = new string[0];
-                string[] radiantBans = new string[0];
-                string[] direPicks = new string[0];
-                string[] direBans = new string[0];
-                //This means the match was in captains mode so there are picks/bans
-                if (jsonMatch.GameMode == 2)
-                {
-                    radiantPicks = jsonMatch.RadiantPicks.Select(t => heroes[t]).ToArray();
-                    radiantBans = jsonMatch.RadiantBans.Select(t => heroes[t]).ToArray();
-                    direPicks = jsonMatch.DirePicks.Select(t => heroes[t]).ToArray();
-                    direBans = jsonMatch.DireBans.Select(t => heroes[t]).ToArray();
-                }
-                //TODO: Exception happens here in adding matches. Its one of the commented out lines
+                //TODO: Hopefully these teams will also be stored in cache so don't need to call API so many times since teams don't change by the minute. Look into it
+                var jsonRadiant = accessor.GetTeamInfo(match.RadiantTeamID);
+                var jsonDire = accessor.GetTeamInfo(match.DireTeamID);
                 matches.Add(new PastMatch
                 {
-                    ID = jsonMatch.ID,
+                    ID = match.ID,
+                    StartTime = match.StartTime,
                     Tournament = new Tournament
                     {
-                        ID = tournamentID,
-                        Name = tournament.Name.Replace("_", " "),
+                        ID = tournament.ID,
+                        Name = tournament.Name,
                         TicketItemID = tournament.TicketItemID,
                     },
-                    GameType = jsonMatch.GameMode,
-                    IsSourceTwo = Convert.ToBoolean(jsonMatch.Engine),
-                    ServerClusterNum = jsonMatch.ServerClusterNum,
-                    RadiantVictory = jsonMatch.RadiantWin,
-                    StartTime = jsonMatch.StartTime,
-                    Duration = jsonMatch.Duration,
-                    Radiant = new Team
-                    {
-                        Kills = jsonMatch.RadiantKills,
-                        BarracksState = jsonMatch.RadiantBarracksState,
-                        TowerState = jsonMatch.RadiantTowerState,
-                        Picks = radiantPicks,
-                        Bans = radiantBans,
-                        Players = radiantPlayers,
-                        OfficialTeam = new OfficialTeam
-                        {
-                            CaptainID = jsonMatch.RadiantCaptainID,
-                            ID = jsonMatch.RadiantTeamID,
-                            LogoURL = accessor.GetImageURL(jsonMatch.RadiantLogoID),
-                            Name = jsonMatch.RadiantName,
-                            Players = radiantAccounts,
-                        }
-                    },
-                    Dire = new Team
-                    {
-                        Kills = jsonMatch.DireKills,
-                        BarracksState = jsonMatch.DireBarracksState,
-                        TowerState = jsonMatch.DireTowerState,
-                        Picks = direPicks,
-                        Bans = direBans,
-                        Players = direPlayers,
-                        OfficialTeam = new OfficialTeam
-                        {
-                            CaptainID = jsonMatch.DireCaptainID,
-                            ID = jsonMatch.DireTeamID,
-                            LogoURL = accessor.GetImageURL(jsonMatch.DireLogoID),
-                            Name = jsonMatch.DireName,
-                            Players = direAccounts,
-                        }
-                    }
+                    Radiant = convertJsonTeamToTeam(null, jsonRadiant, null, null),
+                    Dire = convertJsonTeamToTeam(null, jsonDire, null, null),
                 });
             }
             return matches;
@@ -228,21 +164,40 @@ namespace DataManager
 
         private Team convertJsonTeamToTeam(JsonTeam team, JsonTeamProfile teamProfile, IEnumerable<Player> players, IEnumerable<ProPlayer> accounts)
         {
+            //This occurs when the game is in the drafting stage & no heroes have been picked
             if (team == null)
             {
-                //This occurs when the game is in the drafting stage & no heroes have been picked
-                return new Team
+                if (teamProfile != null)
                 {
-                    Players = players,
-                    OfficialTeam = new OfficialTeam
+                    return new Team
                     {
-                        ID = teamProfile.ID,
-                        Name = teamProfile.Name,
-                        LogoURL = accessor.GetImageURL(teamProfile.LogoID),
-                        CaptainID = teamProfile.CaptainID,
-                        Players = accounts
-                    }
-                };
+                        Players = players,
+                        OfficialTeam = new OfficialTeam
+                        {
+                            ID = teamProfile.ID,
+                            Name = teamProfile.Name,
+                            LogoURL = accessor.GetImageURL(teamProfile.LogoID),
+                            CaptainID = teamProfile.CaptainID,
+                            Players = accounts
+                        }
+                    };
+                }
+                else
+                {
+                    //This happens when a team has an official ID but for some reason doesn't have a Team Profile
+                    return new Team
+                    {
+                        Players = players,
+                        OfficialTeam = new OfficialTeam
+                        {
+                            ID = 0,
+                            Name = "Unofficial Team",
+                            LogoURL = accessor.GetImageURL(0),
+                            CaptainID = 0,
+                            Players = accounts
+                        }
+                    };
+                }
             }
             if (team.HeroPicks == null)
             {

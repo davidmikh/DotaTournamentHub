@@ -53,7 +53,7 @@
                              RelativePanel.AlignTopWithPanel="True" Text="{Binding Tournament.Name}" />
 
         <!--  content  -->
-        <ScrollViewer RelativePanel.Below="pageHeader" VerticalScrollBarVisibility="Visible" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
+        <ScrollViewer RelativePanel.Below="pageHeader" VerticalScrollBarVisibility="Auto" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
             <StackPanel>
                 <TextBlock x:Name="liveMatchesTxtBlock" Text="Live Matches" Margin="5, 5, 5, 5" FontSize="20" RelativePanel.Below="pageHeader" 
                    RelativePanel.AlignLeftWithPanel="true" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignHorizontalCenterWithPanel="True"></TextBlock>
@@ -87,7 +87,7 @@
                     </Core:EventTriggerBehavior>
                 </ItemsControl>
 
-                <TextBlock x:Name="completedMatchesTxtBlock" Text="Completed Matches" Margin="5, 5, 5, 5" FontSize="20" RelativePanel.Below="liveMatchesItemsControl" 
+                <TextBlock x:Name="completedMatchesTxtBlock" Text="Recently Completed Matches" Margin="5, 5, 5, 5" FontSize="20" RelativePanel.Below="liveMatchesItemsControl" 
                    RelativePanel.AlignLeftWithPanel="true" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignHorizontalCenterWithPanel="True"></TextBlock>
                 <ItemsControl x:Name="pastMatchesItemsControl"
                       ItemsSource="{Binding Tournament.Matches}"

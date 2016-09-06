@@ -14,7 +14,7 @@
     <Controls:HamburgerMenu x:Name="MyHamburgerMenu">
 
         <Controls:HamburgerMenu.PrimaryButtons>
-            <!--  upcomingGamesPage button  -->
+            <!--  liveGamesPage button  -->
             <Controls:HamburgerButtonInfo ClearHistory="True" PageType="views:LiveGamesPage">
                 <StackPanel Orientation="Horizontal">
                     <SymbolIcon Width="48" Height="48"
@@ -24,14 +24,14 @@
                 </StackPanel>
             </Controls:HamburgerButtonInfo>
             <!--  upcomingGamesPage button  -->
-            <Controls:HamburgerButtonInfo ClearHistory="True" PageType="views:UpcomingGamesPage">
+            <!--<Controls:HamburgerButtonInfo ClearHistory="True" PageType="views:UpcomingGamesPage">
                 <StackPanel Orientation="Horizontal">
                     <SymbolIcon Width="48" Height="48"
                                 Symbol="Home" />
                     <TextBlock Margin="12,0,0,0" VerticalAlignment="Center"
                                Text="Upcoming Games" />
                 </StackPanel>
-            </Controls:HamburgerButtonInfo>
+            </Controls:HamburgerButtonInfo>-->
         </Controls:HamburgerMenu.PrimaryButtons>
 
         <Controls:HamburgerMenu.SecondaryButtons>
