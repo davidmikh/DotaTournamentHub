@@ -130,6 +130,11 @@ namespace DataAccess
                 while (!success)
                 {
                     response = client.GetAsync(string.Format("ISteamRemoteStorage/GetUGCFileDetails/v1?key={0}&appid={1}&ugcid={2}", devKey, gameID, imageID)).Result;
+                    if (response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        //Specific problem with image URLs since some teams don't have images. Load generic image instead
+                        return new Uri("http://hcap.artstor.org/collect/cic-hcap/index/assoc/p168.dir/no_image-large.jpg");
+                    }
                     success = handleResponse(response.StatusCode);
                 }
                 JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["data"];
