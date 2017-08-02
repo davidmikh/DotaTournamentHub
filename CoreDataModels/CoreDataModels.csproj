@@ -111,7 +111,7 @@
     <Compile Include="Player.cs" />
     <Compile Include="LiveMatch.cs" />
     <Compile Include="Match.cs" />
-    <Compile Include="ProPlayer.cs" />
+    <Compile Include="ProAccount.cs" />
     <Compile Include="OfficialTeam.cs" />
     <Compile Include="Team.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

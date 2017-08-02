@@ -36,22 +36,22 @@ namespace DataManager
             {
                 var radiant = accessor.GetTeamInfo(jsonMatch.Radiant.ID);
                 var dire = accessor.GetTeamInfo(jsonMatch.Dire.ID);
-                if (radiant == null || dire == null)
+                var tournament = tournaments.Where(t => t.ID == jsonMatch.LeagueID).SingleOrDefault();
+                if (radiant == null || dire == null || tournament == null)
                 {
                     //At least one of the teams isn't an official valve registered team meaning this can't be a tournament game
                     continue;
                 }
-                List<ProPlayer> radiantAccounts = new List<ProPlayer>();
-                List<ProPlayer> direAccounts = new List<ProPlayer>();
+                List<ProAccount> radiantAccounts = new List<ProAccount>();
+                List<ProAccount> direAccounts = new List<ProAccount>();
                 List<Player> radiantPlayers = new List<Player>();
                 List<Player> direPlayers = new List<Player>();
-                //TODO: Bring this back to before where players & accounts were split. New version isn't as ideal for live games
                 //This can be null when the game is live but still in the drafting stage and no hero has been picked
                 if (jsonMatch.ScoreBoard.Radiant != null)
                 {
                     foreach (var player in jsonMatch.ScoreBoard.Radiant.Players)
                     {
-                        radiantAccounts.Add(convertJsonAccountToProPlayer(accessor.GetAccountInfo(player.AccountID)));
+                        radiantAccounts.Add(convertJsonAccountToProAccount(accessor.GetAccountInfo(player.AccountID)));
                         radiantPlayers.Add(convertJsonPlayerToPlayer(player));
                     }
                 }
@@ -59,11 +59,10 @@ namespace DataManager
                 {
                     foreach (var player in jsonMatch.ScoreBoard.Dire.Players)
                     {
-                        direAccounts.Add(convertJsonAccountToProPlayer(accessor.GetAccountInfo(player.AccountID)));
+                        direAccounts.Add(convertJsonAccountToProAccount(accessor.GetAccountInfo(player.AccountID)));
                         direPlayers.Add(convertJsonPlayerToPlayer(player));
                     }
                 }
-                var tournament = tournaments.Where(t => t.ID == jsonMatch.LeagueID).First();
                 matches.Add(new LiveMatch
                 {
                     ID = jsonMatch.ID,
@@ -118,9 +117,9 @@ namespace DataManager
             return matches;
         }
 
-        private ProPlayer convertJsonAccountToProPlayer(JsonAccount account)
+        private ProAccount convertJsonAccountToProAccount(JsonAccount account)
         {
-            return new ProPlayer
+            return new ProAccount
             {
                 ID = account.ID,
                 Name = account.Name,
@@ -136,7 +135,16 @@ namespace DataManager
             List<string> playerItems = new List<string>();
             foreach (var item in player.Items)
             {
-                playerItems.Add(items[item]);
+                //TODO: There is currently a bug with items where the ID can be too high. Gets as high as 265
+                if (item <= items.Length)
+                {
+                    playerItems.Add(items[item]);
+                }
+            }
+            if (player.HeroID >= heroes.Length)
+            {
+                //TODO: THere is currently a bug with heros where the ID can be too high. Gets as high as 114
+                player.HeroID = 0;
             }
             return new Player
             {
@@ -162,7 +170,7 @@ namespace DataManager
             };
         }
 
-        private Team convertJsonTeamToTeam(JsonTeam team, JsonTeamProfile teamProfile, IEnumerable<Player> players, IEnumerable<ProPlayer> accounts)
+        private Team convertJsonTeamToTeam(JsonTeam team, JsonTeamProfile teamProfile, IEnumerable<Player> players, IEnumerable<ProAccount> accounts)
         {
             //This occurs when the game is in the drafting stage & no heroes have been picked
             if (team == null)

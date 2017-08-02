@@ -155,7 +155,12 @@ namespace DataAccess
                     success = handleResponse(response.StatusCode);
                 }
 
-                JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["result"]["teams"].FirstOrDefault();
+                //This logic is necessary in order to parse numbers that are greater than 64 bits into JSON objects.
+                //Can remove this if we find a better library than JSON.NET
+                var result = response.Content.ReadAsStringAsync().Result;
+                result = createJsonWithQuotedAttributeVal(result, "\"logo\":");
+                result = createJsonWithQuotedAttributeVal(result, "\"logo_sponsor\":");
+                JToken json = JObject.Parse(result)["result"]["teams"].FirstOrDefault();
                 if (json == null)
                 {
                     return null;
@@ -244,6 +249,16 @@ namespace DataAccess
                     //A new unseen response message occured - should check it and create better error handling
                     throw new Exception(String.Format("{0} is not properly handled!", code.ToString()));
             }
+        }
+
+        private String createJsonWithQuotedAttributeVal(String json, String attribute)
+        {
+            StringBuilder resultBuilder = new StringBuilder(json);
+            int indexOfValStart = json.LastIndexOf(attribute) + attribute.Length;
+            int indexOfValEnd = json.IndexOf(",", indexOfValStart) + 1;
+            resultBuilder = resultBuilder.Insert(indexOfValStart, "\"");
+            resultBuilder = resultBuilder.Insert(indexOfValEnd, "\"");
+            return resultBuilder.ToString();
         }
     }
 }

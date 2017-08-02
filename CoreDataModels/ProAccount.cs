@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CoreDataModels
 {
-    public class ProPlayer
+    public class ProAccount
     {
         public long ID { get; set; }
         public string Name { get; set; }

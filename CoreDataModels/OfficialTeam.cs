@@ -11,7 +11,7 @@ namespace CoreDataModels
         public string Name { get; set; }
         public long ID { get; set; }
         public long CaptainID { get; set; }
-        public IEnumerable<ProPlayer> Players { get; set; }
+        public IEnumerable<ProAccount> Players { get; set; }
         public Uri LogoURL { get; set; }
     }
 }
