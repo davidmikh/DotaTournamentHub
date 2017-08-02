@@ -79,7 +79,7 @@ namespace DataAccessTest
         public void GetAccountInfo(long accountID, string name)
         {
             var account = accessor.GetAccountInfo(accountID);
-            Assert.AreEqual(name, account.Name);
+            Assert.IsTrue(account.URL.ToString().Contains("DendiQ"));
         }
     }
 }
