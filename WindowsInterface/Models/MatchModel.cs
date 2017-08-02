@@ -11,7 +11,7 @@ namespace WindowsInterface.Models
     {
         public long ID { get; set; }
         public bool IsLive { get; set; }
-        public TeamModel Radiant { get; set; }
-        public TeamModel Dire { get; set; }
+        public OfficialTeamModel Radiant { get; set; }
+        public OfficialTeamModel Dire { get; set; }
     }
 }

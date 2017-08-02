@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace WindowsInterface.Models
 {
-    public class TeamModel
+    public class OfficialPlayerModel
     {
         public long ID { get; set; }
         public string Name { get; set; }
-        public Uri LogoURL { get; set; }
+        public Uri URL { get; set; }
+        public Uri Image { get; set; }
+        public string RealName { get; set; }
+        public string CountryCode { get; set; }
     }
 }

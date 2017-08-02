@@ -12,90 +12,95 @@ using System.Collections.ObjectModel;
 
 namespace WindowsInterface.ViewModels
 {
-    public class LiveGamesPageViewModel : ViewModelBase
+    public class PastGamePageViewModel : ViewModelBase
     {
         private TournamentManager tournamentManager;
-        private List<TournamentModel> _Tournaments;
-        public List<TournamentModel> Tournaments { get { return _Tournaments; } set { Set(ref _Tournaments, value); } }
+        private PastMatchInfoModel pastMatch;
+        public PastMatchInfoModel PastMatch { get { return pastMatch; } set { Set(ref pastMatch, value); } }
 
-        public LiveGamesPageViewModel()
+        public PastGamePageViewModel()
         {
             //Used to easily display information in the xaml editor without launching the program
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
-                Tournaments = new List<TournamentModel>
+                List<GamePlayerModel> players = new List<GamePlayerModel>();
+                for(int i = 0; i < 10; i++)
                 {
-                    new TournamentModel
+                    players.Add(new GamePlayerModel()
                     {
-                        ID = 4664,
-                        Name = "The International 2016",
-                        Matches = new ObservableCollection<MatchModel>
+                        Assists = 3,
+                        Deaths = 4,
+                        Denies = 2,
+                        GPM = 222,
+                        Hero = "Meepo",
+                        Items = new string[6] { "Tango", "Tango", "Tango", "Tango", "Tango", "Tango" },
+                        Kills = 3,
+                        LastHits = 60,
+                        Level = 25,
+                        NetWorth = 19000,
+                        Slot = i,
+                        XPM = 715,
+                        Player = new OfficialPlayerModel()
                         {
-                            new MatchModel
-                            {
-                                ID = 2558534849,
-                                Radiant = new OfficialTeamModel
-                                {
-                                    ID = 2163,
-                                    Name = "Team Liquid",
-                                    LogoURL = new Uri("http://riki.dotabuff.net/t/l/XNAr01Hbpm.png")
-                                },
-                                Dire = new OfficialTeamModel
-                                {
-                                    ID = 36,
-                                    Name = "Natus Vincere",
-                                    LogoURL = new Uri("http://riki.dotabuff.net/t/l/3QxyeKbMK6.png")
-                                },
-                            },
-                            new MatchModel
-                            {
-                                ID = 2551474091,
-                                Radiant = new OfficialTeamModel
-                                {
-                                    ID = 2512249,
-                                    Name = "Digital Chaos",
-                                    LogoURL = new Uri("http://riki.dotabuff.net/t/l/pAwIGd6wVT.png")
-                                },
-                                Dire = new OfficialTeamModel
-                                {
-                                    ID = 2163,
-                                    Name = "Team Liquid",
-                                    LogoURL = new Uri("http://riki.dotabuff.net/t/l/XNAr01Hbpm.png")
-                                },
-                            }
+                            CountryCode = "1",
+                            ID = 12,
+                            Image = new Uri(""),
+                            Name = "Dondo",
+                            RealName = "Danil",
+                            URL = new Uri(""),
                         }
+                    });
+                }
+
+                pastMatch = new PastMatchInfoModel()
+                {
+                    ID = 123,
+                    Tournament = new TournamentModel()
+                    {
+                        ID = 333333322,
+                        Name = "TestTourny",
+                        Matches = null,
                     },
-                    new TournamentModel
+                    StartTime = new DateTime(0),
+                    Duration = new TimeSpan(100000),
+                    GameType = 1,
+                    RadiantVictory = false,
+                    Radiant = new GameTeamModel()
                     {
-                        ID = 3781,
-                        Name = "The Summit 4",
-                        Matches = new ObservableCollection<MatchModel>
+                        Bans = new string[5] { "Monkey King", "Doom", "Viper", "Visage", "Axe" },
+                        BarracksState = 1,
+                        Kills = 22,
+                        OfficialTeam = new OfficialTeamModel()
                         {
-                            new MatchModel
-                            {
-                                ID = 1995989266,
-                                Radiant = new OfficialTeamModel
-                                {
-                                    ID = 39,
-                                    Name = "Evil Geniuses",
-                                    LogoURL = new Uri("http://riki.dotabuff.net/t/l/aI2hxnL46H.png")
-                                },
-                                Dire = new OfficialTeamModel
-                                {
-                                    ID = 726228,
-                                    Name = "Vici Gaming",
-                                    LogoURL = new Uri("http://riki.dotabuff.net/t/l/2bR6gRR8zG.png")
-                                },
-                            }
-                        }
+                            ID = 1,
+                            LogoURL = new Uri("https://riki.dotabuff.com/t/l/11PExo6a83w.png"),
+                            Name = "LULQUID",
+                        },
+                        TowerState = 1,
+                        Players = players.Take(5),
+                    },
+                    Dire = new GameTeamModel()
+                    {
+                        Bans = new string[5] { "Alchemist", "Magnus", "Enigma", "Puck", "Pudge" },
+                        BarracksState = 1,
+                        Kills = 22,
+                        OfficialTeam = new OfficialTeamModel()
+                        {
+                            ID = 1,
+                            LogoURL = new Uri("https://riki.dotabuff.com/t/l/11PExo6a83w.png"),
+                            Name = "NAR'VI",
+                        },
+                        TowerState = 1,
+                        Players = players.Skip(5),
                     }
                 };
             }
             else
             {
                 tournamentManager = new TournamentManager();
-                _Tournaments = new List<TournamentModel>();
+                pastMatch = new PastMatchInfoModel();
 
+                /*
                 var liveGames = tournamentManager.GetLiveTournamentGames();
                 var tournaments = liveGames.GroupBy(t => t.Tournament.ID);
 
@@ -128,6 +133,7 @@ namespace WindowsInterface.ViewModels
                         Matches = matches
                     });
                 }
+                */
             }
         }
 

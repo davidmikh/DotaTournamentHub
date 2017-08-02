@@ -97,11 +97,16 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\GamePlayerModel.cs" />
+    <Compile Include="Models\GameTeamModel.cs" />
     <Compile Include="Models\MatchModel.cs" />
-    <Compile Include="Models\TeamModel.cs" />
+    <Compile Include="Models\OfficialPlayerModel.cs" />
+    <Compile Include="Models\PastMatchInfoModel.cs" />
+    <Compile Include="Models\OfficialTeamModel.cs" />
     <Compile Include="Models\TournamentModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\SettingsServices\SettingsService.cs" />
+    <Compile Include="ViewModels\PastGamePageViewModel.cs" />
     <Compile Include="ViewModels\TournamentPageViewModel.cs" />
     <Compile Include="ViewModels\LiveGamesPageViewModel.cs" />
     <Compile Include="ViewModels\UpcomingGamesPageViewModel.cs" />
@@ -110,6 +115,9 @@
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
     <Compile Include="Views\Busy.xaml.cs">
       <DependentUpon>Busy.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PastGamePage.xaml.cs">
+      <DependentUpon>PastGamePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TournamentPage.xaml.cs">
       <DependentUpon>TournamentPage.xaml</DependentUpon>
@@ -165,6 +173,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="Views\Busy.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\PastGamePage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

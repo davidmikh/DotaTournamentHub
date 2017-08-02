@@ -38,13 +38,13 @@ namespace WindowsInterface.ViewModels
                         new MatchModel
                         {
                             ID = 2558534849,
-                            Radiant = new TeamModel
+                            Radiant = new OfficialTeamModel
                             {
                                 ID = 2163,
                                 LogoURL = new Uri("http://riki.dotabuff.net/t/l/XNAr01Hbpm.png"),
                                 Name = "Team Liquid"
                             },
-                            Dire = new TeamModel
+                            Dire = new OfficialTeamModel
                             {
                                 ID = 36,
                                 LogoURL = new Uri("http://riki.dotabuff.net/t/l/3QxyeKbMK6.png"),
@@ -55,13 +55,13 @@ namespace WindowsInterface.ViewModels
                         new MatchModel
                         {
                             ID = 2551170074,
-                            Radiant = new TeamModel
+                            Radiant = new OfficialTeamModel
                             {
                                 ID = 2586976,
                                 LogoURL = new Uri("http://riki.dotabuff.net/t/l/JzKKxkMt36.png"),
                                 Name = "OG"
                             },
-                            Dire = new TeamModel
+                            Dire = new OfficialTeamModel
                             {
                                 ID = 36,
                                 LogoURL = new Uri("http://riki.dotabuff.net/t/l/3QxyeKbMK6.png"),
@@ -72,13 +72,13 @@ namespace WindowsInterface.ViewModels
                         new MatchModel
                         {
                             ID = 2551023876,
-                            Radiant = new TeamModel
+                            Radiant = new OfficialTeamModel
                             {
                                 ID = 1836806,
                                 LogoURL = new Uri("http://riki.dotabuff.net/t/l/Q3h09RN8Of.png"),
                                 Name = "Wings Gaming"
                             },
-                            Dire = new TeamModel
+                            Dire = new OfficialTeamModel
                             {
                                 ID = 36,
                                 LogoURL = new Uri("http://riki.dotabuff.net/t/l/3QxyeKbMK6.png"),
@@ -146,13 +146,13 @@ namespace WindowsInterface.ViewModels
             return new MatchModel
             {
                 ID = match.ID,
-                Radiant = new TeamModel
+                Radiant = new OfficialTeamModel
                 {
                     ID = match.Radiant.OfficialTeam.ID,
                     Name = match.Radiant.OfficialTeam.Name,
                     LogoURL = match.Radiant.OfficialTeam.LogoURL
                 },
-                Dire = new TeamModel
+                Dire = new OfficialTeamModel
                 {
                     ID = match.Dire.OfficialTeam.ID,
                     Name = match.Dire.OfficialTeam.Name,
