@@ -47,12 +47,12 @@ namespace DataAccess
                     success = handleResponse(response.StatusCode);
                 }
                 JToken json = JObject.Parse(response.Content.ReadAsStringAsync().Result)["result"].First().First();
-                List<JsonTournament> tournamnets = new List<JsonTournament>();
+                List<JsonTournament> tournaments = new List<JsonTournament>();
                 foreach (var tournament in json)
                 {
-                    tournamnets.Add(new JsonTournament(tournament));
+                    tournaments.Add(new JsonTournament(tournament));
                 }
-                return tournamnets;
+                return tournaments;
             }
         }
 
