@@ -81,3 +81,6 @@ artifacts/
 *.pidb
 *.svclog
 *.scc
+
+# Visual studio Files
+.vs/
